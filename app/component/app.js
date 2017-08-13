@@ -18,18 +18,14 @@ var App = React.createClass({
 
         return (
             <div>
-                <LoginView/>
-                <h1>Hey,this is a React and Antd IDE1233111</h1>
-                <div className="Antd">
-                    <Button type="primary" size="large">成功加载Antd组件</Button>
-                </div>
-                <Navbar style={{marginTop: 20}}>
+                <Navbar style={{marginTop: 2}}>
                     <Navbar.Header>
                         <Navbar.Brand>
-                            <a href="#">react-bootstrap</a>
+                            <a href="#">金凤针织商品管理</a>
                         </Navbar.Brand>
                     </Navbar.Header>
                 </Navbar>
+                <LoginView/>
             </div>
         )
     }

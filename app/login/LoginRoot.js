@@ -39,7 +39,6 @@ class LoginRoot extends React.Component {
     }
 
     __onclick() {
-        alert("我被点击了");
         var loginValue = {
             email: "5753",
             password:"2232"
