@@ -17,7 +17,7 @@ var App = React.createClass({
     render: function() {
 
         return (
-            <div>
+            <div className="ds">
                 <Navbar style={{marginTop: 2}}>
                     <Navbar.Header>
                         <Navbar.Brand>
@@ -25,7 +25,7 @@ var App = React.createClass({
                         </Navbar.Brand>
                     </Navbar.Header>
                 </Navbar>
-                <LoginView/>
+                <LoginView />
             </div>
         )
     }

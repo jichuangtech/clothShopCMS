@@ -25,23 +25,35 @@ class NormalLoginForm extends React.Component {
         });
     }
 
+    __onNameChange(val) {
+        this.setState({
+            email:val.target.value
+        });
+    }
+
+    __onPasswordChange(val) {
+        this.setState({
+            password:val.target.value
+        });
+    }
+
     render() {
         const { getFieldDecorator } = this.props.form;
-        alert("状态: " + this.props.loginProps.status)
+        var status = this.props.loginProps.status;
         return (
             <Form onSubmit={this.handleSubmit} className="login-form">
                 <FormItem>
                     {getFieldDecorator('userName', {
                         rules: [{ required: true, message: 'Please input your username!' }],
                     })(
-                        <Input prefix={<Icon type="user" style={{ fontSize: 13 }} />} placeholder="Username"/>
+                        <Input prefix={<Icon type="user" style={{ fontSize: 13 }} />} placeholder="Username" onChange={this.__onNameChange.bind(this)}/>
                     )}
                 </FormItem>
                 <FormItem>
                     {getFieldDecorator('password', {
                         rules: [{ required: true, message: 'Please input your Password!' }],
                     })(
-                        <Input prefix={<Icon type="lock" style={{ fontSize: 13 }} />} type="password" placeholder="Password" />
+                        <Input prefix={<Icon type="lock" style={{ fontSize: 13 }} />} type="password" placeholder="Password" onChange={this.__onPasswordChange.bind(this)}/>
                     )}
                 </FormItem>
                 <FormItem>
@@ -55,7 +67,7 @@ class NormalLoginForm extends React.Component {
                     <Button type="primary" htmlType="submit" className="login-form-button" onClick={this.__submitBtn.bind(this)}>
                         Log in
                     </Button>
-                    Or <a href="">register now!</a>
+                    Or <a href="">register now! {this.props.loginProps.status}</a>
                 </FormItem>
             </Form>
         );

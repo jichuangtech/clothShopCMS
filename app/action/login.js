@@ -19,11 +19,15 @@ export function login(opt) {
     return (dispatch)=> {
         //先发送登录中的状态
         dispatch({ type : LoginType.LOGGED_ING});
-
         var loginValue = {
             email : opt.email,
             password : opt.password
         };
+
+        var url = "http://www.baidu.com";
+        fecth(url, {}).then(function (res) {
+            alert("车弄")
+        });
         //
         // //进行网络请求
         // NetUtils.postJson('https://www.guufar.com/api/user/login',
