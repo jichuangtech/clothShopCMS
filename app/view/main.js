@@ -4,7 +4,7 @@
 
 import React from 'react';
 import ReactDOM from 'react-dom';
-import LoginView from '../login/LoginView';
+import LoginView from './LoginView';
 
 
 import {

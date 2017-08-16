@@ -4,8 +4,8 @@
 
 import React from 'react';
 import ReactDOM from 'react-dom';
-import LoginView from '../login/LoginView';
-import MainView from '../goods/Main';
+import LoginView from '../view/LoginView';
+import MainView from '../view/main';
 
 
 import {
