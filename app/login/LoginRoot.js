@@ -6,7 +6,15 @@ import { connect } from 'react-redux';
 import * as LoginAction from '../action/login';
 import { Form, Icon, Input, Button, Checkbox } from 'antd';
 const FormItem = Form.Item;
-
+import {
+    Router,
+    Route,
+    HashRouter,
+    hashHistory,
+    Link,
+    BrowserRouter
+} from 'react-router-dom';
+import createHistory from 'history/createHashHistory';
 /**
  * ES6  写法
  */
@@ -24,6 +32,7 @@ class NormalLoginForm extends React.Component {
         this.props.form.validateFields((err, values) => {
             if (!err) {
                 console.log('Received values of form: ', values);
+                this.props.history.push("/main");
             }
         });
     }
@@ -44,7 +53,7 @@ class NormalLoginForm extends React.Component {
         const { getFieldDecorator } = this.props.form;
         var status = this.props.loginProps.status;
         return (
-            <Form onSubmit={this.handleSubmit} className="login-form">
+            <Form onSubmit={this.handleSubmit.bind(this)} className="login-form">
                 <FormItem>
                     {getFieldDecorator('userName', {
                         rules: [{ required: true, message: 'Please input your username!' }],
@@ -67,21 +76,13 @@ class NormalLoginForm extends React.Component {
                         <Checkbox>Remember me</Checkbox>
                     )}
                     <a className="login-form-forgot" href="">Forgot password</a>
-                    <Button type="primary" htmlType="submit" className="login-form-button" onClick={this.__submitBtn.bind(this)}>
+                    <Button type="primary" htmlType="submit" className="login-form-button">
                         Log in
                     </Button>
                     Or <a href="">register now! {this.props.loginProps.status}</a>
                 </FormItem>
             </Form>
         );
-    }
-
-    __submitBtn() {
-        var loginValue = {
-            username:this.state.username,
-            password:this.state.password
-        };
-        this.props.dispatch(LoginAction.login(loginValue));
     }
 }
 

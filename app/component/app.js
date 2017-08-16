@@ -5,6 +5,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import LoginView from '../login/LoginView';
+import MainView from '../goods/Main';
 
 
 import {
@@ -16,7 +17,7 @@ import {
     Route,
     HashRouter,
     hashHistory,
-    Link
+    Link,
 } from 'react-router-dom';
 
 import {Navbar} from "react-bootstrap";
@@ -46,6 +47,7 @@ var AppRouter = React.createClass({
                         <Route exact path="/" component={LoginView} />
                         <Route exact path="/login" component={LoginView} />
                         <Route exact path="/register" component={Register} />
+                        <Route exact path="/main" component={MainView} />
                     </center>
                 </div>
             </HashRouter>

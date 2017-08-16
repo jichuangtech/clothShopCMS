@@ -7,7 +7,7 @@ class LoginView extends React.Component {
     render() {
         return (
             <Provider store={store}>
-                <LoginRoot/>
+                <LoginRoot history={this.props.history}/>
             </Provider>
         );
     }
