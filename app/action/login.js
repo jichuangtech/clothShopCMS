@@ -2,6 +2,7 @@ import React from 'react';
 
 import * as LoginType from '../constant/loginType';
 import * as RegisterType from '../constant/registerType';
+import NetUtils from '../utils/NetUtils';
 
 let skipUser = {
   'name' : 'bingo',
@@ -15,18 +16,18 @@ let testUser = {
 
 //login
 export function login(opt) {
-    console.log(" login, email: " + opt.email + ", password: " + opt.password);
+    console.log(" login, username: " + opt.username + ", password: " + opt.password);
     return (dispatch)=> {
         //先发送登录中的状态
         dispatch({ type : LoginType.LOGGED_ING});
         var loginValue = {
-            email : opt.email,
+            username : opt.username,
             password : opt.password
         };
 
-        var url = "http://www.baidu.com";
-        fecth(url, {}).then(function (res) {
-            alert("车弄")
+        var url = "http://www.jichuangtech.site/clothshopserver/api/goodsCategories";
+        NetUtils.get(url, function (data) {
+            alert("数据: " + data);
         });
         //
         // //进行网络请求

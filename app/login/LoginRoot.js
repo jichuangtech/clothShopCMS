@@ -7,11 +7,14 @@ import * as LoginAction from '../action/login';
 import { Form, Icon, Input, Button, Checkbox } from 'antd';
 const FormItem = Form.Item;
 
+/**
+ * ES6  写法
+ */
 class NormalLoginForm extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            email: "unknown",
+            username: "unknown",
             password: "**"
         }
     }
@@ -75,7 +78,7 @@ class NormalLoginForm extends React.Component {
 
     __submitBtn() {
         var loginValue = {
-            email:this.state.email,
+            username:this.state.username,
             password:this.state.password
         };
         this.props.dispatch(LoginAction.login(loginValue));

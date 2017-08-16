@@ -27,6 +27,7 @@ h1{
 .login-form {
     max-width: 300px;
     flex: 1;
+    margin-top:4%;
 }
  .login-form-forgot {
     float: right;
