@@ -5,7 +5,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import LoginView from '../login/LoginView';
-
+import MainPage from '../pages/main';
 
 import {
     Button
@@ -24,7 +24,7 @@ import {Navbar} from "react-bootstrap";
 
 var Register = React.createClass({
 
-    render :function () {
+    render: function () {
         return (<div>我是注册</div>);
     }
 });
@@ -42,10 +42,11 @@ var AppRouter = React.createClass({
                             </Navbar.Brand>
                         </Navbar.Header>
                     </Navbar>
-                    <center>
-                        <Route exact path="/" component={LoginView} />
-                        <Route exact path="/login" component={LoginView} />
-                        <Route exact path="/register" component={Register} />
+                    <center style={{height: '100%'}}>
+                        <Route exact path="/" component={LoginView}/>
+                        <Route exact path="/login" component={LoginView}/>
+                        <Route exact path="/register" component={Register}/>
+                        <Route exact path="/main" component={MainPage}/>
                     </center>
                 </div>
             </HashRouter>
