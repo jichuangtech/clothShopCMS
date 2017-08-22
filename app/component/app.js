@@ -5,18 +5,19 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import LoginView from '../pages/LoginView';
-import MainPage from '../pages/main';
+import { Provider } from 'react-redux';
+import store from '../store/index';
+import MainView from '../pages/main';
 
-import {
-    Button
-} from 'antd';
 
 import {
     Router,
     Route,
     HashRouter,
     hashHistory,
-    Link,
+    BrowserRouter,
+    Switch,
+    Link
 } from 'react-router-dom';
 
 import {Navbar} from "react-bootstrap";
@@ -29,35 +30,59 @@ var Register = React.createClass({
     }
 });
 
+const Hot=({match})=>(<div style={{display:'flex', flexDirection:"column"}}>
+<div style={{display:"inline"}}>
+    <h2>热门</h2>
+    <Link to={`${match.url}/article`}>文章</Link>
+    <Link to={`${match.url}/qa`}>问答</Link>
+    <Link to={`${match.url}/news`}>新闻</Link>
+    <hr/>
+    </div>
+    <div>
+    <Route path={`${match.url}/:type`} component={Content}/>
+        </div>
+</div>);
+
+
 var AppRouter = React.createClass({
 
     render: function () {
         return (
-            <HashRouter history={hashHistory}>
-                <div>
+            <BrowserRouter>
+                <div style={ {display:'flex', flexDirection : "column", flex:1}}>
                     <Navbar style={{marginTop: 2}}>
                         <Navbar.Header>
                             <Navbar.Brand>
-                                <a href="/#">金凤针织商品管理</a>
+                                <a href="/">金凤针织商品管理</a>
                             </Navbar.Brand>
                         </Navbar.Header>
                     </Navbar>
-                    <center style={{height: '100%'}}>
+                    <center>
                         <Route exact path="/" component={LoginView}/>
+                        <Route path="/main" component={MainView} />
                         <Route exact path="/login" component={LoginView}/>
                         <Route exact path="/register" component={Register}/>
-                        <Route exact path="/main" component={MainPage}/>
                     </center>
                 </div>
-            </HashRouter>
+            </BrowserRouter>
 
         );
     }
 
 });
 
+var App = React.createClass({
+    render: function () {
+        return (
+            <Provider store={store}>
+                <AppRouter/>
+            </Provider>
+        );
+    }
+
+});
 
 ReactDOM.render(
-    <AppRouter/>,
+    <App/>,
     document.getElementById('app')
 );

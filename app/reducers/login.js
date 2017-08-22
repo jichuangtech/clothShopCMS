@@ -4,7 +4,7 @@ const initialState = {
     isLoggedIn : false,
     user: {},
     status: "unknown",
-    tip:"unknown",
+    tip:"未知",
 };
 
 export default function login(state=initialState, action) {
