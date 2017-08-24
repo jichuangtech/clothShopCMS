@@ -2,10 +2,12 @@
  * Created by Bingo on 2017/6/5.
  */
 var React = require("react");
-import { connect } from 'react-redux';
+import {connect} from 'react-redux';
 import * as LoginAction from '../action/login';
-import { Form, Icon, Input, Button, Checkbox } from 'antd';
+import {Form, Icon, Input, Button, Checkbox} from 'antd';
 import * as LoginType from '../constant/loginType';
+import NetUtils from '../utils/NetUtils';
+
 const FormItem = Form.Item;
 import {
     Router,
@@ -32,7 +34,14 @@ class NormalLoginForm extends React.Component {
         this.props.form.validateFields((err, values) => {
             if (!err) {
                 console.log('Received values of form: ', values);
-                this.props.history.push("/main");
+                var self = this;
+
+                NetUtils.get("http://127.0.0.1:8087/login?username=" + values["userName"] + "&password=" + values["password"], function (res) {
+                    if (res !== "no") {
+                        sessionStorage.setItem("access_token", res);
+                        self.props.history.push("/main");
+                    }
+                });
                 // this.props.dispatch({ type : LoginType.LOGGED_ING})
             }
         });
@@ -40,33 +49,35 @@ class NormalLoginForm extends React.Component {
 
     __onNameChange(val) {
         this.setState({
-            email:val.target.value
+            email: val.target.value
         });
     }
 
     __onPasswordChange(val) {
         this.setState({
-            password:val.target.value
+            password: val.target.value
         });
     }
 
     render() {
-        const { getFieldDecorator } = this.props.form;
+        const {getFieldDecorator} = this.props.form;
         var status = this.props.loginProps.status;
         return (
             <Form onSubmit={this.handleSubmit.bind(this)} className="login-form">
                 <FormItem>
                     {getFieldDecorator('userName', {
-                        rules: [{ required: true, message: 'Please input your username!' }],
+                        rules: [{required: true, message: 'Please input your username!'}],
                     })(
-                        <Input prefix={<Icon type="user" style={{ fontSize: 13 }} />} placeholder="Username" onChange={this.__onNameChange.bind(this)}/>
+                        <Input prefix={<Icon type="user" style={{fontSize: 13}}/>} placeholder="Username"
+                               onChange={this.__onNameChange.bind(this)}/>
                     )}
                 </FormItem>
                 <FormItem>
                     {getFieldDecorator('password', {
-                        rules: [{ required: true, message: 'Please input your Password!' }],
+                        rules: [{required: true, message: 'Please input your Password!'}],
                     })(
-                        <Input prefix={<Icon type="lock" style={{ fontSize: 13 }} />} type="password" placeholder="Password" onChange={this.__onPasswordChange.bind(this)}/>
+                        <Input prefix={<Icon type="lock" style={{fontSize: 13}}/>} type="password"
+                               placeholder="Password" onChange={this.__onPasswordChange.bind(this)}/>
                     )}
                 </FormItem>
                 <FormItem>
@@ -94,7 +105,6 @@ const WrappedNormalLoginForm = Form.create()(NormalLoginForm);
 const mapStateToProps = state => ({
     loginProps: state.loginReducer
 })
-
 
 
 export default connect(mapStateToProps)(WrappedNormalLoginForm);

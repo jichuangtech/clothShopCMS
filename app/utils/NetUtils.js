@@ -9,7 +9,7 @@ class NetUtils extends React.Component {
      * data : 参数(Json对象)
      * callback : 回调函数
      * */
-    static postJson (url, data, successCallback, errorCallback) {
+    static postJson(url, data, successCallback, errorCallback) {
         console.log("postJson str:" + JSON.stringify(data));
         var fetchOption = {
             method: 'POST',
@@ -25,8 +25,8 @@ class NetUtils extends React.Component {
             .then((responseText) => {
                 successCallback(JSON.parse(responseText));
             }).catch((error) => {
-                 console.log("postJson error: " + error);
-            }).done();
+            console.log("postJson error: " + error);
+        }).done();
     }
 
     /**
@@ -39,7 +39,9 @@ class NetUtils extends React.Component {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'host': "127.0.0.1",
+                'Access-Token': sessionStorage.getItem('access_token') || ''
             }
         };
         fetch(url, fetchOptions)
@@ -47,9 +49,9 @@ class NetUtils extends React.Component {
             .then((responseText) => {
                 callback(responseText);
             }).catch((errorMsg) => {
-                console.log("get errorMsg: " + errorMsg);
-            }).done();
-        }
+            console.log("get errorMsg: " + errorMsg);
+        });
+    }
 
     /*
      *  get请求
@@ -58,7 +60,7 @@ class NetUtils extends React.Component {
      *  callback:回调函数
      * */
 
-    static get1(url,params,callback) {
+    static get1(url, params, callback) {
         if (params) {
             let paramsArray = [];
             //拼接参数
@@ -70,73 +72,69 @@ class NetUtils extends React.Component {
             }
         }
         //fetch请求
-        fetch(url,{
+        fetch(url, {
             method: 'GET',
         }).then((response) => response.text())
             .then((responseText) => {
                 callback(responseText);
             }).catch((error) => {
-                alert(error)
+            alert(error)
         }).done();
     }
-    }
+}
 
 
-
-
-
-    /*  第一种：'Content-Type': 'application/json'
-     *  post请求
-     *  url:请求地址
-     *  params:参数,这里的参数格式是：{param1: 'value1',param2: 'value2'}
-     *  callback:回调函数
-     * */
-    const postJSON = function(url,params,callback){
-        //fetch请求
-        fetch(url,{
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-            },
-            body:JSON.stringify(params)
+/*  第一种：'Content-Type': 'application/json'
+ *  post请求
+ *  url:请求地址
+ *  params:参数,这里的参数格式是：{param1: 'value1',param2: 'value2'}
+ *  callback:回调函数
+ * */
+const postJSON = function (url, params, callback) {
+    //fetch请求
+    fetch(url, {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(params)
+    })
+        .then((response) => response.json())
+        .then((responseJSON) => {
+            callback(responseJSON)
         })
-            .then((response) => response.json())
-            .then((responseJSON) => {
-                callback(responseJSON)
-            })
-            .catch((error) => {
-                console.log("error = " + error)
-            });
-    }
+        .catch((error) => {
+            console.log("error = " + error)
+        });
+}
 
-    /*  第二种： form表单形式
-     *  post请求
-     *  url:请求地址
-     *  params:参数,这里的参数要用这种格式：'key1=value1&key2=value2'
-     *  callback:回调函数
-     * */
-    const postForm =function (url,params,callback){
-        //fetch请求
-        fetch(url,{
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-            },
-            body: params
+/*  第二种： form表单形式
+ *  post请求
+ *  url:请求地址
+ *  params:参数,这里的参数要用这种格式：'key1=value1&key2=value2'
+ *  callback:回调函数
+ * */
+const postForm = function (url, params, callback) {
+    //fetch请求
+    fetch(url, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: params
+    })
+        .then((response) => response.json())
+        .then((responseJSON) => {
+            callback(responseJSON)
         })
-            .then((response) => response.json())
-            .then((responseJSON) => {
-                callback(responseJSON)
-            })
-            .catch((error) => {
-                console.log("error = " + error)
-            });
+        .catch((error) => {
+            console.log("error = " + error)
+        });
 
 }
 
 module.exports = NetUtils;
-
 
 
 //将JSON数据转换成字符串
