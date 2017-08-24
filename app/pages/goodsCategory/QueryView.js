@@ -43,9 +43,47 @@ class QueryView extends React.Component{
         };
     }
 
+    addCate(name, image) {
+        var cate = {
+            name: name,
+            image: image
+        }
+
+        // var url = "http://localhost:8070/api/goodsCategories";
+        var url = "http://www.jichuangtech.site/clothshopserver/api/goodsCategories";
+
+        var self = this;
+
+        fetch(url,{
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(cate)
+        }).then((response) => response.text())
+            .then(function (responseJson) {
+                self.queryCategory();
+            }, function (error) {
+                alert("请求失败 error: " + error);
+            });
+
+    }
+
+    onAddBtnClick() {
+        this.addCate(this.refs.name.value, this.refs.image.value);
+    }
+
     render() {
-        return <Table columns={columns} dataSource={this.state.data}/>;
-        // return (<div><h1 style={{color:  '#0f0'}}>我是商品分类查询</h1></div>);
+        return (
+            <div>
+                <Table columns={columns} dataSource={this.state.data}/>
+                <div>
+                    <input type="text" placeholder="商品分类" ref="name"/> <br/>
+                    <input placeholder="商品分类图片" ref="image"/> <br/>
+                    <input type="submit" onClick={this.onAddBtnClick.bind(this)} />
+                </div>
+            </div>);
     }
 
     componentWillMount() {

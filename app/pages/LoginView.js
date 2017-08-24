@@ -35,8 +35,8 @@ class NormalLoginForm extends React.Component {
             if (!err) {
                 console.log('Received values of form: ', values);
                 var self = this;
-
-                NetUtils.get("http://127.0.0.1:8087/login?username=" + values["userName"] + "&password=" + values["password"], function (res) {
+                this.props.history.push("/main");
+                NetUtils.get("http://127.0.0.1:8070/login?username=" + values["userName"] + "&password=" + values["password"], function (res) {
                     if (res !== "no") {
                         sessionStorage.setItem("access_token", res);
                         self.props.history.push("/main");
