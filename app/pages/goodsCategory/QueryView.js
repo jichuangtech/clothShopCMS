@@ -2,7 +2,8 @@
  * Created by Administrator on 2017/8/16.
  */
 var React = require("react");
-import {Table, Icon} from 'antd';
+import {Table, Icon, Alert, message} from 'antd';
+import NetUtils from '../../utils/NetUtils';
 
 const columns = [{
     title: '分类',
@@ -22,17 +23,18 @@ const columns = [{
     key: 'action',
     render: (text, record) => (
         <span>
-      <a href="#">Action 一 {record.name}</a>
+      <a href="#" style={{display: 'none'}}>Action 一 {record.name}</a>
       <span className="ant-divider" />
-      <a href="#">Delete</a>
+      <a href="#" onClick={queryViewRef.deleteCategory.bind(queryViewRef, record.id)}>Delete</a>
       <span className="ant-divider" />
-      <a href="#" className="ant-dropdown-link">
+      <a href="#" className="ant-dropdown-link" style={{display: 'none'}} >
         More actions <Icon type="down" />
       </a>
     </span>
     ),
 }];
 
+var queryViewRef;
 
 class QueryView extends React.Component{
 
@@ -41,6 +43,25 @@ class QueryView extends React.Component{
         this.state = {
             data : []
         };
+        queryViewRef  = this;
+    }
+
+    deleteCategory(categoryId) {
+        var self = this;
+        var url = "https://www.jichuangtech.site/clothshopserver/api/goodsCategories";
+
+        var params = [];
+        params["categoryId"] = categoryId;
+        NetUtils.delete(url, params, function (json) {
+            if(json.statusCode == 200) {
+                self.queryCategory();
+                message.info("删除成功！");
+            } else {
+                message.info(json.msg);
+            }
+        }, function (e) {
+            alert(" 删除失败 e: " + e);
+        });
     }
 
     addCate(name, image) {
@@ -116,13 +137,13 @@ class QueryView extends React.Component{
                 key: '' + index,
                 category: json[index].name,
                 image: json[index].image,
+                id: json[index].id
             };
 
             data.push(row);
         }
 
         this.setState({
-
             data: data
         });
     }

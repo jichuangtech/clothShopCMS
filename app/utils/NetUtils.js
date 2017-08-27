@@ -81,6 +81,35 @@ class NetUtils extends React.Component {
             alert(error)
         }).done();
     }
+
+    /*
+    *  delete请求
+    *  url:请求地址
+    *  params:参数
+    *  callback:回调函数
+    * */
+
+    static delete(url, params, successCB, failCB) {
+        if (params) {
+            let paramsArray = [];
+            //拼接参数
+            Object.keys(params).forEach(key => paramsArray.push(key + '=' + params[key]))
+            if (url.search(/\?/) === -1) {
+                url += '?' + paramsArray.join('&')
+            } else {
+                url += '&' + paramsArray.join('&')
+            }
+        }
+        //fetch请求
+        fetch(url, {
+            method: 'DELETE',
+        }).then((response) => response.json())
+            .then((responseJson) => {
+                successCB(responseJson);
+            }).catch((error) => {
+            failCB(error)
+        });
+    }
 }
 
 
