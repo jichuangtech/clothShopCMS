@@ -50,7 +50,7 @@ class QueryView extends React.Component{
         }
 
         // var url = "http://localhost:8070/api/goodsCategories";
-        var url = "http://www.jichuangtech.site/clothshopserver/api/goodsCategories";
+        var url = "https://www.jichuangtech.site/clothshopserver/api/goodsCategories";
 
         var self = this;
 
@@ -91,7 +91,7 @@ class QueryView extends React.Component{
     }
 
     queryCategory() {
-        var url = "http://www.jichuangtech.site/clothshopserver/api/goodsCategories";
+        var url = "https://www.jichuangtech.site/clothshopserver/api/goodsCategories";
         var self = this;
         fetch(url,{
             method: 'GET',
