@@ -29,9 +29,16 @@ h1{
     flex: 1;
     margin-top:4%;
 }
- .login-form-forgot {
+
+.login-form-forgot {
     float: right;
 }
- .login-form-button {
+
+.login-form-button {
     width: 100%;
+}
+
+.addCateInput {
+    width:50%;
+    margin-top: 10px;
 }
