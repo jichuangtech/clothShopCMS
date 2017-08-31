@@ -12,6 +12,7 @@ class AddCategoryDialog extends React.Component {
     }
 
     render() {
+        var self = this;
         return (
             <div>
                 <Button type="primary" onClick={this.showDialog.bind(this)}>新增分类</Button>
@@ -31,7 +32,7 @@ class AddCategoryDialog extends React.Component {
     }
 
     onAddBtnClick() {
-        this.addCate(this.refs.name.value, this.refs.image.value);
+        this.addCate(this.refs.name.refs.input.value, this.refs.image.refs.input.value);
     }
 
     addCate(name, image) {
@@ -65,7 +66,7 @@ class AddCategoryDialog extends React.Component {
         }).then((response) => response.text())
             .then(function (responseJson) {
                 //如果添加成功
-                message.info("添加成功!");
+                message.info("添加成功! ");
                 self.hideDialog();
             }, function (error) {
                 message.info("添加商品分类失败");

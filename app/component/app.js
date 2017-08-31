@@ -8,6 +8,7 @@ import LoginView from '../pages/LoginView';
 import { Provider } from 'react-redux';
 import store from '../store/index';
 import MainView from '../pages/main';
+import GoodsCategoryView from '../pages/goodsCategory/GoodsCategoryView';
 
 
 import {
@@ -29,20 +30,6 @@ var Register = React.createClass({
         return (<div>我是注册</div>);
     }
 });
-
-const Hot=({match})=>(<div style={{display:'flex', flexDirection:"column"}}>
-<div style={{display:"inline"}}>
-    <h2>热门</h2>
-    <Link to={`${match.url}/article`}>文章</Link>
-    <Link to={`${match.url}/qa`}>问答</Link>
-    <Link to={`${match.url}/news`}>新闻</Link>
-    <hr/>
-    </div>
-    <div>
-    <Route path={`${match.url}/:type`} component={Content}/>
-        </div>
-</div>);
-
 
 var AppRouter = React.createClass({
 

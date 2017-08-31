@@ -43,8 +43,8 @@ var MainPage = React.createClass({
                     <Sider width={200} collapsedWidth="50" style={{background: '#fff'}} collapsible="false">
                         <Menu
                             mode="inline"
-                            defaultSelectedKeys={['1']}
-                            defaultOpenKeys={['sub1']}
+                            defaultSelectedKeys={['5']}
+                            defaultOpenKeys={['sub2']}
                             style={{borderRight: 0}}
                         >
                             <SubMenu key="sub1" title={<span><Icon type="home"/>商品</span>}>
@@ -91,7 +91,7 @@ var MainPage = React.createClass({
     },
 
     componentDidMount: function () {
-        this.props.history.push(this.props.match.url + "/goods/query");
+        this.props.history.push(this.props.match.url + "/goodsCategory/query");
     }
    });
 

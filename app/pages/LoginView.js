@@ -89,7 +89,7 @@ class NormalLoginForm extends React.Component {
                     )}
                     <a className="login-form-forgot" href="">Forgot password</a>
                     <Button type="primary" htmlType="submit" className="login-form-button">
-                        Log in
+                        登录
                     </Button>
                     Or <a href="">Register now! {this.props.loginProps.status}</a>
                 </FormItem>
