@@ -40,11 +40,32 @@ class GoodsCategoryView extends React.Component {
     }
 
     render() {
+        alert("render");
         return viewMap.get(this.state.action);
     }
 
     componentWillReceiveProps(nextProps) {
+        alert("componentWillReceiveProps");
         this.updateAction(nextProps.match.params.action);
+    }
+
+    /**
+     * 下面不返回的话，就是返回false
+     * 该函数在 componentWillReceiveProps 之后被调用，
+     * （1）如果返回true(默认缺省值) 则进行调用render(),所以可以在componentWillReceiveProps()这个中提前 update state
+     * （2）日过返回false，说明不需要进行更新，则不调用render()
+     */
+    shouldComponentUpdate() {
+        // alert("shouldComponentUpdate");
+        return true;
+    }
+
+    componentWillUpdate() {
+        // alert("componentWillUpdate");
+    }
+
+    componentDidUpdate() {
+        // alert("componentDidUpdate");
     }
 
     componentWillUnmount() {
