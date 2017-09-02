@@ -91,7 +91,7 @@ var MainPage = React.createClass({
     },
 
     componentDidMount: function () {
-        this.props.history.push(this.props.match.url + "/goodsCategory/query");
+        this.props.history.push(this.props.match.url + "/goods/query");
     }
    });
 

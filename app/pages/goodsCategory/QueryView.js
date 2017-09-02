@@ -26,7 +26,7 @@ const columns = [{
         <span>
       <a href="#" style={{display: 'none'}}>Action 一 {record.name}</a>
       <span className="ant-divider" />
-      <a href="#" onClick={queryViewRef.deleteCategory.bind(queryViewRef, record.id)}>Delete</a>
+      <a href="#" onClick={queryViewRef.deleteGoods.bind(queryViewRef, record.id)}>删除</a>
       <span className="ant-divider" />
       <a href="#" className="ant-dropdown-link" style={{display: 'none'}} >
         More actions <Icon type="down" />
