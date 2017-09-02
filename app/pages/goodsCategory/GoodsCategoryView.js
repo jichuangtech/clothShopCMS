@@ -40,12 +40,12 @@ class GoodsCategoryView extends React.Component {
     }
 
     render() {
-        alert("render");
+        // alert("render");
         return viewMap.get(this.state.action);
     }
 
     componentWillReceiveProps(nextProps) {
-        alert("componentWillReceiveProps");
+        // alert("componentWillReceiveProps");
         this.updateAction(nextProps.match.params.action);
     }
 
