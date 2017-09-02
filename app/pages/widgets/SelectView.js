@@ -42,7 +42,7 @@ class SelectView extends React.Component {
     }
 
     getDefaultValue() {
-        return this.props.options.length == 0 ? "未知" : this.props.options[0].value;
+        return this.props.options.length == 0 ? "未知" : this.props.options[0].title;
     }
 
 }
