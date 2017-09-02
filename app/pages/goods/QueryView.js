@@ -46,12 +46,20 @@ const columns = [{
 
 var queryViewRef;
 
+const defaultOption = {
+        value : "-1",
+        title : "全部分类",
+    };
+
 class QueryView extends React.Component{
 
     constructor(props) {
         super(props);
         this.state = {
-            goodsData: []
+            goodsData: [],
+            goodsCategoryOptions:[
+                defaultOption
+            ]
         };
 
         queryViewRef = this;
@@ -71,7 +79,8 @@ class QueryView extends React.Component{
 
                 <div className="topNav">
                     <Button className="topNavItem" onClick={this.publishGoods.bind(this)}>发布商品</Button>
-                    <SelectView className="topNavItem" />
+                    <SelectView className="topNavItem" options={this.state.goodsCategoryOptions}
+                                optionChange={this.onGoodsCategoryOptionChange.bind(this)}/>
                 </div>
 
                 <Table columns={columns} dataSource={this.state.goodsData}/>
@@ -81,12 +90,43 @@ class QueryView extends React.Component{
         );
     }
 
+    onGoodsCategoryOptionChange(categoryId) {
+        if(categoryId < 0) {
+            this.queryGoods();
+        } else {
+            this.queryGoodsByCategoryId(categoryId);
+        }
+
+    }
+
     publishGoods() {
         message.info("发布商品成功.")
     }
 
     componentWillMount() {
         this.queryGoods();
+        this.queryCategory();
+    }
+
+    queryGoodsByCategoryId(categoryId) {
+        var self = this;
+        var url = "https://www.jichuangtech.site/clothshopserver/api/goodsCategories/"
+            + categoryId+ "/goods";
+        console.log("queryGoodsByCategoryId url: " + url);
+
+        fetch(url,{
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            }
+        }).then((response) => response.json())
+            .then(function (responseJson) {
+                self.updateGoods(responseJson)
+            }, function (error) {
+                message.info("获取商品失败: " + error);
+            });
+
     }
 
     queryGoods() {
@@ -102,7 +142,7 @@ class QueryView extends React.Component{
             .then(function (responseJson) {
                 self.updateGoods(responseJson)
             }, function (error) {
-                message.info("请求数据失败: " + error);
+                message.info("获取商品失败: " + error);
             });
     }
 
@@ -125,6 +165,43 @@ class QueryView extends React.Component{
 
         this.setState({
             goodsData: goods
+        });
+    }
+
+    queryCategory() {
+        var url = "https://www.jichuangtech.site/clothshopserver/api/goodsCategories";
+        var self = this;
+        fetch(url,{
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            }
+        }).then((response) => response.json())
+            .then(function (responseJson) {
+                self.updateCategoryOptions(responseJson)
+            }, function (error) {
+                message.info("获取商品分类失败: " + error);
+            });
+    }
+
+    updateCategoryOptions(json) {
+        var options = [
+            defaultOption
+        ];
+
+        for(var index = 0; index < json.length; index ++) {
+
+            var option = {
+                title: json[index].name,
+                value: json[index].id
+            };
+
+            options[index + 1] = option;
+        }
+
+        this.setState({
+            goodsCategoryOptions: options
         });
     }
 }
