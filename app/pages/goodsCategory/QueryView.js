@@ -26,7 +26,7 @@ const columns = [{
         <span>
       <a href="#" style={{display: 'none'}}>Action 一 {record.name}</a>
       <span className="ant-divider" />
-      <a href="#" onClick={queryViewRef.deleteGoods.bind(queryViewRef, record.id)}>删除</a>
+      <a href="#" onClick={queryViewRef.deleteCategory.bind(queryViewRef, record.id)}>删除</a>
       <span className="ant-divider" />
       <a href="#" className="ant-dropdown-link" style={{display: 'none'}} >
         More actions <Icon type="down" />
@@ -67,9 +67,13 @@ class QueryView extends React.Component{
 
     render() {
         return (
-            <div>
+            <div className="goodsBody">
+
+                <div className="topNav">
+                    <AddCategoryDialog className="topNavItem" onDismiss={()=>{this.queryCategory()}}/>
+                </div>
+
                 <Table columns={columns} dataSource={this.state.data}/>
-                <AddCategoryDialog onDismiss={()=>{console.log("我是日志");this.queryCategory()}}/>
             </div>);
     }
 
