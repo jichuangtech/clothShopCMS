@@ -14,7 +14,7 @@ class AddCategoryDialog extends React.Component {
     render() {
         var self = this;
         return (
-            <div>
+            <div className={this.props.className}>
                 <Button onClick={this.showDialog.bind(this)}>发布商品分类</Button>
                 <Modal
                     title="新增商品分类"
@@ -88,6 +88,15 @@ class AddCategoryDialog extends React.Component {
         });
     }
 
+}
+
+AddCategoryDialog.propTypes = {
+    className: React.PropTypes.style,
+
+}
+
+AddCategoryDialog.defaultProps = {
+    className: ""
 }
 
 export default AddCategoryDialog;
