@@ -17,10 +17,9 @@ const Option = Select.Option;
  *
  */
 class SelectView extends React.Component {
-
     render() {
         return (
-            <div>
+            <div className={this.props.className}>
                 <Select defaultValue={this.getDefaultValue()}
                         style={{ width: 120 }} onChange={this.props.optionChange}>
                     {this.getOptionViews()}
@@ -49,7 +48,8 @@ class SelectView extends React.Component {
 
 SelectView.propTypes = {
     options: React.PropTypes.array.isRequired,
-    optionChange: React.PropTypes.func
+    optionChange: React.PropTypes.func,
+    className: React.PropTypes.style
 
 };
 SelectView.defaultProps = {
