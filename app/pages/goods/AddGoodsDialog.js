@@ -2,7 +2,7 @@ var React = require("react");
 import {Modal, Button, message, Input} from 'antd';
 import StringUtils from '../../utils/StringUtils';
 
-class AddCategoryDialog extends React.Component {
+class AddGoodsDialog extends React.Component {
 
     constructor(props) {
         super(props);
@@ -89,13 +89,13 @@ class AddCategoryDialog extends React.Component {
 
 }
 
-AddCategoryDialog.propTypes = {
+AddGoodsDialog.propTypes = {
     className: React.PropTypes.style,
 
 }
 
-AddCategoryDialog.defaultProps = {
+AddGoodsDialog.defaultProps = {
     className: ""
 }
 
-export default AddCategoryDialog;
+export default AddGoodsDialog;

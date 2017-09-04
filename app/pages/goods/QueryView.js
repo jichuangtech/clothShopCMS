@@ -4,6 +4,7 @@
 var React = require("react");
 import {Button, message, Table} from 'antd';
 import SelectView from '../widgets/SelectView';
+import GoodsCategorySelectView from '../widgets/GoodsCategorySelectView';
 
 const columns = [{
     title: ' 图片',
@@ -79,8 +80,7 @@ class QueryView extends React.Component{
 
                 <div className="topNav">
                     <Button className="topNavItem" onClick={this.publishGoods.bind(this)}>发布商品</Button>
-                    <SelectView className="topNavItem" options={this.state.goodsCategoryOptions}
-                                optionChange={this.onGoodsCategoryOptionChange.bind(this)}/>
+                    <GoodsCategorySelectView className="topNavItem" optionChange={this.onGoodsCategoryOptionChange.bind(this)}/>
                 </div>
 
                 <Table columns={columns} dataSource={this.state.goodsData}/>
