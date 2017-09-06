@@ -16,7 +16,7 @@ class AddCategoryDialog extends React.Component {
             <div className={this.props.className}>
                 <Button onClick={this.showDialog.bind(this)}>发布商品分类</Button>
                 <Modal
-                    title="新增商品分类"
+                    title="发布商品分类"
                     visible={this.state.visible}
                     onOk={this.onAddBtnClick.bind(this)}
                     onCancel={this.hideDialog.bind(this)}

@@ -5,6 +5,7 @@ var React = require("react");
 import {Button, message, Table} from 'antd';
 import SelectView from '../widgets/SelectView';
 import GoodsCategorySelectView from '../widgets/GoodsCategorySelectView';
+import AddGoodsDialog from './AddGoodsDialog';
 
 const columns = [{
     title: ' 图片',
@@ -60,7 +61,8 @@ class QueryView extends React.Component{
             goodsData: [],
             goodsCategoryOptions:[
                 defaultOption
-            ]
+            ],
+            categoryOptionId: -1
         };
 
         queryViewRef = this;
@@ -79,8 +81,12 @@ class QueryView extends React.Component{
             <div className="goodsBody">
 
                 <div className="topNav">
-                    <Button className="topNavItem" onClick={this.publishGoods.bind(this)}>发布商品</Button>
-                    <GoodsCategorySelectView className="topNavItem" optionChange={this.onGoodsCategoryOptionChange.bind(this)}/>
+                    <AddGoodsDialog
+                        className="topNavItem"
+                        onOkClick={this.queryGoodsByCategoryId.bind(this, this.state.categoryOptionId)}/>
+
+                    <GoodsCategorySelectView className="topNavItem"
+                                             optionChange={this.onGoodsCategoryOptionChange.bind(this)}/>
                 </div>
 
                 <Table columns={columns} dataSource={this.state.goodsData}/>
@@ -91,6 +97,9 @@ class QueryView extends React.Component{
     }
 
     onGoodsCategoryOptionChange(categoryId) {
+        this.setState({
+            categoryOptionId: categoryId,
+        });
         if(categoryId < 0) {
             this.queryGoods();
         } else {
@@ -109,6 +118,7 @@ class QueryView extends React.Component{
     }
 
     queryGoodsByCategoryId(categoryId) {
+        message.info("queryGoodsByCategoryId categoryId: " + categoryId);
         var self = this;
         var url = "https://www.jichuangtech.site/clothshopserver/api/goodsCategories/"
             + categoryId+ "/goods";

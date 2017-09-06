@@ -1,0 +1,5 @@
+.modalDialogRoot {
+    display: flex;
+    flex-direction: column;
+    background: #0000FF;
+}
