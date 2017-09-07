@@ -11,7 +11,7 @@ class GoodsCategorySelectView extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            goodsCategoryOptions: [defaultOption]
+            goodsCategoryOptions: []
         }
     }
 
@@ -44,9 +44,7 @@ class GoodsCategorySelectView extends React.Component {
     }
 
     updateCategoryOptions(json) {
-        var options = [
-            defaultOption
-        ];
+        var options = [];
 
         for(var index = 0; index < json.length; index ++) {
 
@@ -55,7 +53,11 @@ class GoodsCategorySelectView extends React.Component {
                 value: json[index].id
             };
 
-            options[index + 1] = option;
+            options[index] = option;
+        }
+
+        if(this.props.isShowAllItem) {
+            options.unshift(defaultOption);
         }
 
         this.setState({
@@ -69,11 +71,11 @@ class GoodsCategorySelectView extends React.Component {
 
 GoodsCategorySelectView.propTypes = {
     optionChange: React.PropTypes.func,
-    className: React.PropTypes.style,
-
+    isShowAllItem : React.PropTypes.bool
 };
 
 GoodsCategorySelectView.defaultProps = {
+    isShowAllItem: true
 };
 
 export default GoodsCategorySelectView;
