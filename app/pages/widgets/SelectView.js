@@ -1,5 +1,6 @@
 import {Select} from 'antd';
 var React = require("react");
+import {message} from "antd";
 
 const Option = Select.Option;
 
@@ -17,19 +18,29 @@ const Option = Select.Option;
  *
  */
 class SelectView extends React.Component {
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            defaultValue: "",
+            optionViews:[]
+        }
+    }
+
     render() {
         return (
             <div className={this.props.className}>
-                <Select defaultValue={this.getDefaultValue()}
-                        style={{ width: 120 }} onChange={this.props.optionChange}>
-                    {this.getOptionViews()}
+                <Select value={this.state.defaultValue}
+                        style={{ width: 120 }}
+                        onChange={this.props.optionChange}>
+                    {this.state.optionViews}
                 </Select>
             </div>
         );
     }
 
-    getOptionViews() {
-        var options = this.props.options;
+    getOptionViews(props) {
+        var options = props.options;
         var optionViews = [];
 
         for(var index = 0; index < options.length; index++) {
@@ -40,8 +51,23 @@ class SelectView extends React.Component {
         return optionViews;
     }
 
-    getDefaultValue() {
-        return this.props.options.length == 0 ? "未知" : this.props.options[0].title;
+    componentWillMount() {
+        this.setState({
+            defaultValue: this.getDefaultValue(this.props),
+            optionViews: this.getOptionViews(this.props)
+        });
+    }
+
+    getDefaultValue(props) {
+        var value = props.options.length == 0 ? "" : props.options[0].value;
+        return value;
+    }
+
+    componentWillReceiveProps(nextProps) {
+        this.setState({
+            defaultValue: this.getDefaultValue(nextProps),
+            optionViews: this.getOptionViews(nextProps)
+        });
     }
 
 }
@@ -49,7 +75,6 @@ class SelectView extends React.Component {
 SelectView.propTypes = {
     options: React.PropTypes.array.isRequired,
     optionChange: React.PropTypes.func,
-    className: React.PropTypes.style
 
 };
 SelectView.defaultProps = {
