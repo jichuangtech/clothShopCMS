@@ -34,7 +34,7 @@ class NetUtils extends React.Component {
      * url : 请求地址
      * callback : 回调函数
      */
-    static get(url, callback) {
+    static getTest(url, callback) {
         var fetchOptions = {
             method: 'GET',
             headers: {
@@ -49,7 +49,7 @@ class NetUtils extends React.Component {
             .then((responseText) => {
                 callback(responseText);
             }).catch((errorMsg) => {
-            console.log("get errorMsg: " + errorMsg);
+            console.log("getTest errorMsg: " + errorMsg);
         });
     }
 
@@ -60,7 +60,7 @@ class NetUtils extends React.Component {
      *  callback:回调函数
      * */
 
-    static get1(url, params, callback) {
+    static get(url, params, successCallback, errorCallback) {
         if (params) {
             let paramsArray = [];
             //拼接参数
@@ -76,9 +76,9 @@ class NetUtils extends React.Component {
             method: 'GET',
         }).then((response) => response.text())
             .then((responseText) => {
-                callback(responseText);
+                successCallback(responseText);
             }).catch((error) => {
-            alert(error)
+                errorCallback(error)
         }).done();
     }
 
