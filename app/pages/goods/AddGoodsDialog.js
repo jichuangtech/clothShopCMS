@@ -182,9 +182,8 @@ class AddGoodsDialog extends React.Component {
 }
 
 AddGoodsDialog.propTypes = {
-    className: React.PropTypes.style,
-    onDismiss: React.PropTypes,
-    onOkClick: React.PropTypes.func.isRequired
+    onDismiss: React.PropTypes.func,
+    onOkClick: React.PropTypes.func
 
 }
 

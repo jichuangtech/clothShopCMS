@@ -3,15 +3,49 @@
  */
 var React = require("react");
 import QueryView from './QueryView';
+import  * as ActionType from '../../constant/ActionType';
 import {message} from 'antd';
 import AddView from './AddView';
 
-var GoodsView = React.createClass({
-    render() {
-        // message.info(" msg: " + this.props.match.params.action + ", url: " + this.props.match.url);
-        // message.info(" msg: " + this.props.match.params.goods + ", url: " + this.props.match.url);
-        return <QueryView />;
+const viewMap = new Map();
+
+class GoodsView extends React.Component {
+
+    constructor(props) {
+        super(props);
+        //下面要先进行各种状态的定义，不然会出现undefined的情况
+        this.state = {
+            view: (<QueryView/>),
+            action: ActionType.QUERY
+        }
+
+        viewMap.set(ActionType.ADD, (<AddView/>));
+        viewMap.set(ActionType.QUERY, (<QueryView/>));
     }
-});
+
+
+    componentWillMount() {
+        this.updateAction(this.props.match.params.action);
+    }
+
+
+    updateAction(action) {
+        this.setState({
+            action: action
+        });
+
+    }
+
+    render() {
+        // alert("render");
+        return viewMap.get(this.state.action);
+    }
+
+    componentWillReceiveProps(nextProps) {
+        // alert("componentWillReceiveProps");
+        this.updateAction(nextProps.match.params.action);
+    }
+}
+
 
 export default GoodsView;

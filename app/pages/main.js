@@ -24,7 +24,7 @@ class MainPage extends React.Component{
         super(props);
         this.state = {
             current: '1',
-            openKeys: []
+            openKeys: ['sub1']
         }
     }
 
@@ -115,7 +115,7 @@ class MainPage extends React.Component{
                             <Breadcrumb.Item>App</Breadcrumb.Item>
                         </Breadcrumb>
                         <Content style={{background: '#F6FAFE', padding: 0, margin: 0, height: '100%'}}>
-                            <Route path={`${this.props.match.url}/:goods/:action`} component={GoodsView}/>
+                            <Route path={`${this.props.match.url}/goods/:action`} component={GoodsView}/>
                             <Route path={`${this.props.match.url}/goodsCategory/:action`}
                                    component={GoodsCategoryView}/>
                             <Route path={`${this.props.match.url}/order/:action`} component={OrderView}/>

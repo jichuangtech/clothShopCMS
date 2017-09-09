@@ -77,6 +77,7 @@ class QueryView extends React.Component{
     }
 
     render() {
+        console.log("Goods Query render")
         return (
             <div className="goodsBody">
 
@@ -85,8 +86,10 @@ class QueryView extends React.Component{
                         className="topNavItem"
                         onOkClick={this.queryGoodsByCategoryId.bind(this, this.state.categoryOptionId)}/>
 
-                    <GoodsCategorySelectView className="topNavItem"
-                                             optionChange={this.onGoodsCategoryOptionChange.bind(this)}/>
+                    <GoodsCategorySelectView
+                        isShowAllItem={true}
+                        className="topNavItem"
+                        optionChange={this.onGoodsCategoryOptionChange.bind(this)}/>
                 </div>
 
                 <Table columns={columns} dataSource={this.state.goodsData}/>
@@ -118,7 +121,6 @@ class QueryView extends React.Component{
     }
 
     queryGoodsByCategoryId(categoryId) {
-        message.info("queryGoodsByCategoryId categoryId: " + categoryId);
         var self = this;
         var url = "https://www.jichuangtech.site/clothshopserver/api/goodsCategories/"
             + categoryId+ "/goods";
@@ -132,6 +134,7 @@ class QueryView extends React.Component{
             }
         }).then((response) => response.json())
             .then(function (responseJson) {
+                console.log(" goods query 获取商品成功 ");
                 self.updateGoods(responseJson)
             }, function (error) {
                 message.info("获取商品失败: " + error);
