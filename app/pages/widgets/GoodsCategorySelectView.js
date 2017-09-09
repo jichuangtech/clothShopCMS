@@ -11,19 +11,28 @@ class GoodsCategorySelectView extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            goodsCategoryOptions: []
+            goodsCategoryOptions: [],
+            isQueryInfoComplete: false
         }
     }
 
 
     render(){
+        console.log(" GoodsCategorySelectView render");
         return <SelectView className={this.props.className}
                            options={this.state.goodsCategoryOptions}
-                           optionChange={this.props.optionChange.bind(this)}/>
+                           optionChange={this.onOptionChange.bind(this)}/>
     }
 
     componentDidMount() {
+        console.log(" GoodsCategorySelectView componentDidMount");
         this.queryCategory();
+    }
+
+    onOptionChange(value) {
+        if(this.props.optionChange != undefined) {
+            this.props.optionChange(value);
+        }
     }
 
     queryCategory() {
@@ -50,7 +59,7 @@ class GoodsCategorySelectView extends React.Component {
 
             var option = {
                 title: json[index].name,
-                value: json[index].id
+                value: json[index].id + ""
             };
 
             options[index] = option;
@@ -61,10 +70,18 @@ class GoodsCategorySelectView extends React.Component {
         }
 
         this.setState({
-            goodsCategoryOptions: options
+            goodsCategoryOptions: options,
+            isQueryInfoComplete: true
         });
     }
 
+    componentWillReceiveProps() {
+        console.log(" GoodsCategorySelectView componentWillReceiveProps");
+    }
+
+    shouldComponentUpdate() {
+        return !this.state.isQueryInfoComplete;
+    }
 
 
 }
