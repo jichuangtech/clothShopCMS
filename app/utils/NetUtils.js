@@ -9,8 +9,8 @@ class NetUtils extends React.Component {
      * data : 参数(Json对象)
      * callback : 回调函数
      * */
-    static postJson(url, data, successCallback, errorCallback) {
-        console.log("postJson str:" + JSON.stringify(data));
+    static postJson(url, data, successCallback, failCallback, errorCallback) {
+        console.log("postJson url: " + url + ", data: " + JSON.stringify(data));
         var fetchOption = {
             method: 'POST',
             headers: {
@@ -21,12 +21,14 @@ class NetUtils extends React.Component {
         };
 
         fetch(url, fetchOption)
-            .then((response) => response.text())
-            .then((responseText) => {
-                successCallback(JSON.parse(responseText));
-            }).catch((error) => {
-            console.log("postJson error: " + error);
-        }).done();
+            .then((response) => response.json())
+            .then((responseJson) => {
+                successCallback(responseJson);
+            }, function (failMsg) {
+                failCallback(failMsg)
+            }).catch(function(error) {
+                errorCallback(error)
+            });
     }
 
     /**
@@ -60,7 +62,7 @@ class NetUtils extends React.Component {
      *  callback:回调函数
      * */
 
-    static get(url, params, successCallback, errorCallback) {
+    static get(url, params, successCallback, failCallback, errorCallback) {
         if (params) {
             let paramsArray = [];
             //拼接参数
@@ -74,12 +76,14 @@ class NetUtils extends React.Component {
         //fetch请求
         fetch(url, {
             method: 'GET',
-        }).then((response) => response.text())
-            .then((responseText) => {
-                successCallback(responseText);
+        }).then((response) => response.json())
+            .then((responseJson) => {
+                successCallback(responseJson);
+            }, function (failMsg) {
+                failCallback(failMsg)
             }).catch((error) => {
                 errorCallback(error)
-        }).done();
+        });
     }
 
     /*

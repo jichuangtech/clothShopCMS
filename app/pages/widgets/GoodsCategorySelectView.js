@@ -73,6 +73,11 @@ class GoodsCategorySelectView extends React.Component {
             goodsCategoryOptions: options,
             isQueryInfoComplete: true
         });
+
+        var defId = options.length > 0 ? options[0].value : -1;
+        if(this.props.onInfoQueryComplete) {
+            this.props.onInfoQueryComplete(defId);
+        }
     }
 
     componentWillReceiveProps() {
@@ -88,7 +93,8 @@ class GoodsCategorySelectView extends React.Component {
 
 GoodsCategorySelectView.propTypes = {
     optionChange: React.PropTypes.func,
-    isShowAllItem : React.PropTypes.bool
+    isShowAllItem : React.PropTypes.bool,
+    onInfoQueryComplete: React.PropTypes.func
 };
 
 GoodsCategorySelectView.defaultProps = {

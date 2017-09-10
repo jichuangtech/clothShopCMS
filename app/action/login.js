@@ -26,7 +26,7 @@ export function login(opt) {
         };
 
         var url = "http://www.jichuangtech.site/clothshopserver/api/goodsCategories";
-        NetUtils.get(url, function (data) {
+        NetUtils.getTest(url, function (data) {
             alert("数据: " + data);
         });
         //
