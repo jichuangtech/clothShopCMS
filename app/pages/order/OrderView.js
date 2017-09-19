@@ -2,7 +2,6 @@
  * Created by Administrator on 2017/8/16.
  */
 import QueryView from './QueryView';
-import EditView from './EditView';
 import  * as ActionType from '../../constant/ActionType';
 
 var React = require("react");
@@ -15,12 +14,7 @@ class OrderView extends React.Component {
             view: (<QueryView/>),
             action: ActionType.QUERY
         }
-        viewMap.set(ActionType.QUERY, (<QueryView editCallback={this.editOrder}/>));
-        viewMap.set(ActionType.EDIT, (<EditView/>));
-    }
-
-    editOrder(order_id) {
-        this.updateAction(ActionType.EDIT);
+        viewMap.set(ActionType.QUERY, (<QueryView />));
     }
 
     componentWillMount() {

@@ -2,7 +2,9 @@
  * Created by Administrator on 2017/8/16.
  */
 var React = require("react");
-import {Button, message, Table, Select, Modal, Row, Col, Input} from 'antd';
+import {Button, message, Table, Select, Modal, Row, Col, Input, Spin} from 'antd';
+import NetUtils from '../../utils/NetUtils';
+
 const TitleSpan = 4;
 const ValueSpan = 8;
 const inputWidth = 200;
@@ -48,14 +50,27 @@ const columns = [{
     title: '订单状态',
     dataIndex: 'orderStatus',
     key: 'orderStatus',
-    render: text => <a href="#">{text}</a>,
+    render: text => {
+        switch (text) {
+            case 1:
+                return <a href="#">待支付</a>
+            case 2:
+                return <a href="#">待收货</a>
+            case 3:
+                return <a href="#">已收货</a>
+            case 4:
+                return <a href="#">已完成</a>
+            default:
+                return <a href="#">{text}</a>
+        }
+    },
 }, {
     title: '操作',
     key: 'action',
     render: (text, record) => (
         <span>
             <a href="#"
-               onClick={queryViewRef.editGoods.bind(queryViewRef, record.orderId, record.address, record.mobile, record.consignee, record.orderStatus)}>编辑</a>
+               onClick={queryViewRef.editOrders.bind(queryViewRef, record.orderId, record.address, record.mobile, record.consignee, record.orderStatus, record.userId)}>编辑</a>
     </span>
     ),
 }];
@@ -74,7 +89,9 @@ class QueryView extends React.Component {
             phone: "",
             consignee: "",
             orderStatus: "",
-            visible: false
+            userId: "",
+            visible: false,
+            loading: false
         };
 
         queryViewRef = this;
@@ -84,73 +101,56 @@ class QueryView extends React.Component {
         message.info("删除商品");
     }
 
-    editGoods(orderId, address, phone, consignee, orderStatus) {
+    editOrders(orderId, address, phone, consignee, orderStatus, userId) {
         // this.props.editCallback.bind(this, order_id);
 
         this.setState({
             visible: true,
             orderId: orderId,
+            userId: userId,
             address: address,
             phone: phone,
             consignee: consignee,
-            orderStatus: orderStatus
+            orderStatus: orderStatus + ""
         });
     }
 
     render() {
-        console.log("Goods Query render")
         return (
             <div className="goodsBody">
 
                 <Select style={{width: 120}}>
                     {this.state.userData}
                 </Select>
-
-                <Table columns={columns} dataSource={this.state.ordersData}/>
+                <Spin spinning={this.state.loading} style={{width: 0}}>
+                    <Table columns={columns} dataSource={this.state.ordersData}/>
+                </Spin>
 
                 <Modal
-                    title="Basic Modal"
+                    title="修改订单"
                     visible={this.state.visible}
                     onOk={this.handleOk.bind(this)}
                     onCancel={this.handleCancel.bind(this)}
                 >
                     <div className="modalDialogRoot">
-                        <Row>
-                            <Col span={TitleSpan}><label>商品分类</label></Col>
+                        <Row style={{margin: 10}}>
+                            <Col span={TitleSpan}><label>订单Id</label></Col>
                             <Col span={ValueSpan}><label>{this.state.orderId}</label></Col>
                         </Row>
 
-                        <Row>
-                            <Col span={TitleSpan}><label>地址</label></Col>
-                            <Col span={ValueSpan}><Input ref="name" value={this.state.address}
-                                                         style={{width: inputWidth}}
-                                                         className="addCateInput"/></Col>
-                        </Row>
-
-                        <Row>
-                            <Col span={TitleSpan}><label>手机</label></Col>
-                            <Col span={ValueSpan}> <Input ref="goodsSn" style={{width: inputWidth}}
-                                                          value={this.state.phone}
-                                                          className="addCateInput"/> </Col>
-                        </Row>
-
-                        <Row>
-                            <Col span={TitleSpan}><label>收货人</label></Col>
-                            <Col span={ValueSpan}> <Input ref="storeCount" style={{width: inputWidth}}
-                                                          value={this.state.consignee}
-                                                          className="addCateInput"/> </Col>
-                        </Row>
-
-                        <Row>
+                        <Row style={{margin: 10}}>
                             <Col span={TitleSpan}><label>订单状态</label></Col>
-                            <Col span={ValueSpan}> <Input ref="goodsContent" style={{width: inputWidth}}
-                                                          value={this.state.orderStatus}
-                                                          className="addCateInput"/> </Col>
+                            <Col span={ValueSpan}>
+                                <Select onChange={this.handleChange.bind(this)} style={{width: 120}}
+                                        ref="orderStatusSelect"
+                                        value={this.state.orderStatus}>
+                                    <Option key="1" value="1">待支付</Option>
+                                    <Option key="2" value="2">待收货</Option>
+                                    <Option key="3" value="3">已收货</Option>
+                                    <Option key="4" value="4">已完成</Option>
+                                </Select>
+                            </Col>
                         </Row>
-
-                        <hr/>
-                        <Button onClick={this.onPublicBtnClick.bind(this)}>修改</Button>
-
                     </div>
                 </Modal>
             </div>
@@ -158,8 +158,10 @@ class QueryView extends React.Component {
         );
     }
 
-    onPublicBtnClick() {
-
+    handleChange(value) {
+        this.setState({
+            orderStatus: value
+        });
     }
 
     handleCancel() {
@@ -169,6 +171,15 @@ class QueryView extends React.Component {
     }
 
     handleOk() {
+        console.log(this.state.orderStatus);
+        let self = this;
+        NetUtils.postJson(`https://www.jichuangtech.site/clothshopserver/api/order/${this.state.userId}/orderstatus/${this.state.orderId}/${this.state.orderStatus}`, {}, function (data) {
+            message.info('保存成功');
+            self.queryOrders();
+        }, function (data) {
+            alert("保存失败");
+        });
+
         this.setState({
             visible: false
         });
@@ -180,6 +191,9 @@ class QueryView extends React.Component {
     }
 
     queryOrders() {
+        this.setState({
+            loading: true
+        });
         var url = "https://www.jichuangtech.site/clothshopserver/api/order/0";
         var self = this;
         fetch(url, {
@@ -190,9 +204,15 @@ class QueryView extends React.Component {
             }
         }).then((response) => response.json())
             .then(function (responseJson) {
-                self.updateOrders(responseJson)
+                self.updateOrders(responseJson);
+                self.setState({
+                    loading: false
+                });
             }, function (error) {
                 message.info("获取订单失败: " + error);
+                self.setState({
+                    loading: false
+                });
             });
     }
 
