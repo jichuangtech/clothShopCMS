@@ -240,7 +240,6 @@ class QueryView extends React.Component {
         }, data => {
             alert("错误" + data)
         });
-        users.push(<Option key="11111" value="11111">11111</Option>);
         this.setState({
             userData: users
         });
