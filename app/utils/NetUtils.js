@@ -26,9 +26,9 @@ class NetUtils extends React.Component {
                 successCallback(responseJson);
             }, function (failMsg) {
                 failCallback(failMsg)
-            }).catch(function(error) {
-                errorCallback(error)
-            });
+            }).catch(function (error) {
+            errorCallback(error)
+        });
     }
 
     /**
@@ -76,22 +76,24 @@ class NetUtils extends React.Component {
         //fetch请求
         fetch(url, {
             method: 'GET',
-        }).then((response) => response.json())
+        }).then((response) => {
+            return response.json()
+        })
             .then((responseJson) => {
                 successCallback(responseJson);
             }, function (failMsg) {
                 failCallback(failMsg)
             }).catch((error) => {
-                errorCallback(error)
+            errorCallback(error)
         });
     }
 
     /*
-    *  delete请求
-    *  url:请求地址
-    *  params:参数
-    *  callback:回调函数
-    * */
+     *  delete请求
+     *  url:请求地址
+     *  params:参数
+     *  callback:回调函数
+     * */
 
     static delete(url, params, successCB, failCB) {
         if (params) {

@@ -7,11 +7,10 @@ import NetUtils from '../../utils/NetUtils';
 
 const TitleSpan = 4;
 const ValueSpan = 8;
-const inputWidth = 200;
 const columns = [{
-    title: ' 订单总价',
-    dataIndex: 'totalAmount',
-    key: 'totalAmount',
+    title: '订单号',
+    dataIndex: 'orderId',
+    key: 'orderId',
     render: text => <a href="#">{text}</a>,
 }, {
     title: '地址',
@@ -37,9 +36,9 @@ const columns = [{
     key: 'orderSn',
     render: text => <a href="#">{text}</a>,
 }, {
-    title: '订单号',
-    dataIndex: 'orderId',
-    key: 'orderId',
+    title: ' 订单总价',
+    dataIndex: 'totalAmount',
+    key: 'totalAmount',
     render: text => <a href="#">{text}</a>,
 }, {
     title: '用户Id',
@@ -91,7 +90,8 @@ class QueryView extends React.Component {
             orderStatus: "",
             userId: "",
             visible: false,
-            loading: false
+            loading: false,
+            selectUserId: 0
         };
 
         queryViewRef = this;
@@ -119,7 +119,7 @@ class QueryView extends React.Component {
         return (
             <div className="goodsBody">
 
-                <Select style={{width: 120}}>
+                <Select style={{width: 120}} defaultValue="0" onChange={this.handleUserChange.bind(this)}>
                     {this.state.userData}
                 </Select>
                 <Spin spinning={this.state.loading} style={{width: 0}}>
@@ -164,6 +164,13 @@ class QueryView extends React.Component {
         });
     }
 
+    handleUserChange(value) {
+        this.setState({
+            selectUserId: value
+        });
+        this.queryOrders(value);
+    }
+
     handleCancel() {
         this.setState({
             visible: false
@@ -190,11 +197,14 @@ class QueryView extends React.Component {
         this.queryUser();
     }
 
-    queryOrders() {
+    queryOrders(userId) {
         this.setState({
             loading: true
         });
-        var url = "https://www.jichuangtech.site/clothshopserver/api/order/0";
+        if (userId === undefined) {
+            userId = 0;
+        }
+        var url = `https://www.jichuangtech.site/clothshopserver/api/order/${userId}`;
         var self = this;
         fetch(url, {
             method: 'GET',
@@ -218,10 +228,19 @@ class QueryView extends React.Component {
 
     queryUser() {
         var users = [];
-        users.push(<Option key="jack">Hack</Option>);
-        users.push(<Option key="hal">yangjb</Option>);
-        users.push(<Option key="jyangk">asdf</Option>);
-        users.push(<Option key="jacaak">sdfef</Option>);
+        users.push(<Option key="0" value="0">全部用户</Option>);
+        NetUtils.get("https://www.jichuangtech.site/clothshopserver/list", {}, function (data) {
+            console.log(data);
+            for (var index = 0; index < data.length; index++) {
+                let userId = data[index].userId;
+                users.push(<Option key={userId} value={userId}>{userId}</Option>);
+            }
+        }, data => {
+            alert("错误" + data)
+        }, data => {
+            alert("错误" + data)
+        });
+        users.push(<Option key="11111" value="11111">11111</Option>);
         this.setState({
             userData: users
         });
@@ -230,20 +249,22 @@ class QueryView extends React.Component {
     updateOrders(json) {
         var orders = [];
         json = json.data;
-        for (var index = 0; index < json.length; index++) {
-            var row = {
-                key: '' + index,
-                totalAmount: json[index].totalAmount,
-                address: json[index].address,
-                mobile: json[index].mobile,
-                consignee: json[index].consignee,
-                orderId: json[index].orderId,
-                userId: json[index].userId,
-                orderStatus: json[index].orderStatus,
-                orderSn: json[index].orderSn
-            };
+        if (json != undefined && json != null) {
+            for (var index = 0; index < json.length; index++) {
+                var row = {
+                    key: '' + index,
+                    totalAmount: json[index].totalAmount,
+                    address: json[index].address,
+                    mobile: json[index].mobile,
+                    consignee: json[index].consignee,
+                    orderId: json[index].orderId,
+                    userId: json[index].userId,
+                    orderStatus: json[index].orderStatus,
+                    orderSn: json[index].orderSn
+                };
 
-            orders.push(row);
+                orders.push(row);
+            }
         }
         this.setState({
             ordersData: orders
