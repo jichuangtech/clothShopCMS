@@ -1,33 +1,37 @@
-*{
+* {
     padding: 0;
-    margin:0;
+    margin: 0;
     list-style: none;
     font-size: 15px;
 
 }
-body{
+
+body {
     background-color: #ffffff;
 }
-h1{
+
+h1 {
     text-align: center;
     font-size: 50px;
     padding: 20px 0;
     color: #fff;
 }
-.Antd{
+
+.Antd {
     text-align: center;
 }
-.ds{
-    display:flex;
+
+.ds {
+    display: flex;
     flex-direction: column;
-    justify-content:center;
+    justify-content: center;
     align-items: center;
 }
 
 .login-form {
     max-width: 300px;
     flex: 1;
-    margin-top:4%;
+    margin-top: 4%;
 }
 
 .login-form-forgot {
@@ -39,6 +43,15 @@ h1{
 }
 
 .addCateInput {
-    width:50%;
+    width: 50%;
     margin-top: 10px;
+}
+
+.menu_div:hover {
+    background-color: #4E4E4E;
+    cursor: pointer;
+    height: 45px;
+    width: 100%;
+    textAlign: center;
+    paddingTop: 10px;
 }

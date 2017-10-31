@@ -11,10 +11,10 @@ const columns = [{
     title: ' 图片',
     dataIndex: 'image',
     key: 'image',
-    render: function(text, record){
+    render: function (text, record) {
         var image = "https://www.jichuangtech.site/clothshopserver/api/goods/picture/" + record.image;
-        return(<img style={{width:34,height:34}}
-                    src={image} />);
+        return (<img style={{width: 34, height: 34}}
+                     src={image}/>);
     }
 }, {
     title: '商品',
@@ -40,7 +40,7 @@ const columns = [{
     render: (text, record) => (
         <span>
       <a href="#" onClick={queryViewRef.deleteGoods.bind(queryViewRef, record.id)}>删除</a>
-      <span className="ant-divider" />
+      <span className="ant-divider"/>
             <a href="#" onClick={queryViewRef.editGoods.bind(queryViewRef, record.id)}>编辑</a>
     </span>
     ),
@@ -49,17 +49,17 @@ const columns = [{
 var queryViewRef;
 
 const defaultOption = {
-        value : "-1",
-        title : "全部分类",
-    };
+    value: "-1",
+    title: "全部分类",
+};
 
-class QueryView extends React.Component{
+class QueryView extends React.Component {
 
     constructor(props) {
         super(props);
         this.state = {
             goodsData: [],
-            goodsCategoryOptions:[
+            goodsCategoryOptions: [
                 defaultOption
             ],
             categoryOptionId: -1
@@ -80,7 +80,9 @@ class QueryView extends React.Component{
         console.log("Goods Query render")
         return (
             <div className="goodsBody">
-
+                <div style={{textAlign: "left", backgroundColor: "#E5F5F5"}}>
+                    <p style={{fontSize: "16", margin: "5"}}>商品>查看商品</p>
+                </div>
                 <div className="topNav">
                     <AddGoodsDialog
                         className="topNavItem"
@@ -103,7 +105,7 @@ class QueryView extends React.Component{
         this.setState({
             categoryOptionId: categoryId,
         });
-        if(categoryId < 0) {
+        if (categoryId < 0) {
             this.queryGoods();
         } else {
             this.queryGoodsByCategoryId(categoryId);
@@ -123,10 +125,10 @@ class QueryView extends React.Component{
     queryGoodsByCategoryId(categoryId) {
         var self = this;
         var url = "https://www.jichuangtech.site/clothshopserver/api/goodsCategories/"
-            + categoryId+ "/goods";
+            + categoryId + "/goods";
         console.log("queryGoodsByCategoryId url: " + url);
 
-        fetch(url,{
+        fetch(url, {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',
@@ -145,7 +147,7 @@ class QueryView extends React.Component{
     queryGoods() {
         var url = "https://www.jichuangtech.site/clothshopserver/api/goods";
         var self = this;
-        fetch(url,{
+        fetch(url, {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',
@@ -162,7 +164,7 @@ class QueryView extends React.Component{
     updateGoods(json) {
         var goods = [];
 
-        for(var index = 0; index < json.length; index ++) {
+        for (var index = 0; index < json.length; index++) {
 
             var row = {
                 key: '' + index,
@@ -184,7 +186,7 @@ class QueryView extends React.Component{
     queryCategory() {
         var url = "https://www.jichuangtech.site/clothshopserver/api/goodsCategories";
         var self = this;
-        fetch(url,{
+        fetch(url, {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',
@@ -203,7 +205,7 @@ class QueryView extends React.Component{
             defaultOption
         ];
 
-        for(var index = 0; index < json.length; index ++) {
+        for (var index = 0; index < json.length; index++) {
 
             var option = {
                 title: json[index].name,

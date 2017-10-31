@@ -5,28 +5,28 @@ import * as RegisterType from '../constant/registerType';
 import NetUtils from '../utils/NetUtils';
 
 let skipUser = {
-  'name' : 'bingo',
-    'age' : '26'
+    'name': 'bingo',
+    'age': '26'
 };
 
 let testUser = {
-    'name' : 'linlin',
-    'age' : '26'
+    'name': 'linlin',
+    'age': '26'
 };
 
 //login
 export function login(opt) {
     console.log(" login, username: " + opt.username + ", password: " + opt.password);
-    return (dispatch)=> {
+    return (dispatch) => {
         //先发送登录中的状态
-        dispatch({ type : LoginType.LOGGED_ING});
+        dispatch({type: LoginType.LOGGED_ING});
         var loginValue = {
-            username : opt.username,
-            password : opt.password
+            username: opt.username,
+            password: opt.password
         };
 
         var url = "http://www.jichuangtech.site/clothshopserver/api/goodsCategories";
-        NetUtils.getTest(url, function (data) {
+        NetUtils.getNormal(url, function (data) {
             alert("数据: " + data);
         });
         //
@@ -50,9 +50,9 @@ export function login(opt) {
 
 export function register(opt) {
 
-    return (dispatch)=> {
+    return (dispatch) => {
         //先发送登录中的状态
-        dispatch({ type : RegisterType.REGISTER_ING});
+        dispatch({type: RegisterType.REGISTER_ING});
 
         //进行网络请求
         // fetch('http://www1.baidu1.com')
@@ -82,20 +82,20 @@ export function register(opt) {
 
 export function skipUser() {
     return {
-        type : LoginType.LOGGED_IN,
-        user : skipUser
+        type: LoginType.LOGGED_IN,
+        user: skipUser
     }
 }
 
 export function loging() {
     return {
-        type : LoginType.LOGGED_ING,
+        type: LoginType.LOGGED_ING,
     }
 }
 
 export function logout() {
     return {
-        type : LoginType.LOGGED_OUT,
+        type: LoginType.LOGGED_OUT,
     }
 }
 

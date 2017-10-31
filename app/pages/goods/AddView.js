@@ -1,5 +1,5 @@
 var React = require("react");
-import {Modal, Button, message, Input, Row, Col, Radio, Checkbox} from 'antd';
+import {Modal, Button, message, Input, Row, Col, Radio, Checkbox, Upload, Icon} from 'antd';
 import StringUtils from '../../utils/StringUtils';
 import GoodsCategorySelectView from '../widgets/GoodsCategorySelectView';
 import NetUtils from '../../utils/NetUtils';
@@ -21,14 +21,15 @@ class AddView extends React.Component {
             visible: false,
             isHot: 0,
             isRecommend: 0,
-            colorOptions:[],
+            colorOptions: [],
             colorIdMap: new Map(),
             colorCheckedList: [],
             colorIndeterminate: false,
             colorCheckAll: false,
             isCodeCheck: false,
             isKgCheck: false,
-            colorData: []
+            colorData: [],
+            image: []
         }
     }
 
@@ -40,7 +41,28 @@ class AddView extends React.Component {
 
 
     render() {
+        const props = {
+            beforeUpload: (file) => {
+                var isImage = false;
+                if (file.type === 'image/jpeg' || file.type === 'image/png') {
+                    isImage = true;
+                }
+                if (!isImage) {
+                    message.error('请上传JPG或者PNG格式的图片!');
+                    return false;
+                }
+                this.setState(({image}) => ({
+                    image: [file],
+                }));
+                return false;
+            },
+            fileList: this.state.image,
+        };
+
         return (<div className="modalDialogRoot">
+            <div style={{textAlign: "left", backgroundColor: "#E5F5F5"}}>
+                <p style={{fontSize: "16", margin: "5"}}>商品>查看商品</p>
+            </div>
             <Row>
                 <Col span={TitleSpan}><label>商品分类</label></Col>
                 <Col span={ValueSpan}>
@@ -60,7 +82,16 @@ class AddView extends React.Component {
                 <Col span={TitleSpan}><label>商品编号</label></Col>
                 <Col span={ValueSpan}> <Input ref="goodsSn" className="addCateInput"/> </Col>
             </Row>
-
+            <Row>
+                <Col span={TitleSpan}><label>商品图片</label></Col>
+                <Col span={ValueSpan}>
+                    <Upload {...props}>
+                        <Button>
+                            <Icon type="upload"/> Select File
+                        </Button>
+                    </Upload>
+                </Col>
+            </Row>
             <Row>
                 <Col span={TitleSpan}><label>*库存</label></Col>
                 <Col span={ValueSpan}> <Input ref="storeCount" className="addCateInput"/> </Col>
@@ -117,13 +148,13 @@ class AddView extends React.Component {
                 <Col span={ValueSpan + 4}>
                     <CheckboxGroup options={this.state.colorOptions}
                                    value={this.state.colorCheckedList}
-                                   onChange={this.onColorCheckChange.bind(this)} />
+                                   onChange={this.onColorCheckChange.bind(this)}/>
                     |<Checkbox
-                        indeterminate={this.state.colorIndeterminate}
-                        onChange={this.onColorCheckAllChange.bind(this)}
-                        checked={this.state.colorCheckAll}>
-                        全选
-                    </Checkbox>
+                    indeterminate={this.state.colorIndeterminate}
+                    onChange={this.onColorCheckAllChange.bind(this)}
+                    checked={this.state.colorCheckAll}>
+                    全选
+                </Checkbox>
                 </Col>
             </Row>
 
@@ -135,7 +166,7 @@ class AddView extends React.Component {
 
     onPublicBtnClick() {
 
-        if(this.checkValid()) {
+        if (this.checkValid()) {
             this.publicGoods();
         } else {
             message.info("参数无效");
@@ -151,18 +182,18 @@ class AddView extends React.Component {
         goodsVO.storeCount = this.refs.storeCount.refs.input.value;
         goodsVO.goodsRemark = this.refs.goodsRemark.refs.input.value;
         goodsVO.goodsContent = this.refs.goodsContent.refs.input.value;
-        goodsVO.isRecommend = this.state.isRecommend ? 1: 0;
-        goodsVO.isHot = this.state.isHot ? 1: 0;
+        goodsVO.isRecommend = this.state.isRecommend ? 1 : 0;
+        goodsVO.isHot = this.state.isHot ? 1 : 0;
 
         var specs = [];
-        if(this.state.isKgCheck) {
+        if (this.state.isKgCheck) {
             var spec = {};
             spec.specId = 1;
             spec.price = this.refs.kgPrice.refs.input.value;
             specs.push(spec);
         }
 
-        if(this.state.isCodeCheck) {
+        if (this.state.isCodeCheck) {
             var spec = {};
             spec.specId = 2;
             spec.price = this.refs.codePrice.refs.input.value;
@@ -178,14 +209,12 @@ class AddView extends React.Component {
          * for(var value : 数组)
          *  value是数组的下标
          */
-        for(var colorName in this.state.colorCheckedList) {
+        for (var colorName in this.state.colorCheckedList) {
             colorIds.push(colorIdMap.get(colorCheckedList[colorName]));
         }
         goodsVO.colorIds = colorIds;
-
-        message.info("public goods: " + JSON.stringify(goodsVO));
-        console.log("public goods: " + JSON.stringify(goodsVO));
-        NetUtils.postJson(Urls.ADD_GOODS_URL, goodsVO, function (response) {
+        goodsVO.image = this.state.image[0];
+        NetUtils.postJsonWithFile(Urls.ADD_GOODS_URL, goodsVO, function (response) {
             console.log("发布商品成功 response: " + JSON.stringify(response));
         }, function () {
             console.log("发布商品失败");
@@ -216,19 +245,18 @@ class AddView extends React.Component {
         this.setState({
             colorCheckedList: colorCheckedList,
             colorIndeterminate: !!colorCheckedList.length
-            && (colorCheckedList.length< this.state.colorOptions.length),
+            && (colorCheckedList.length < this.state.colorOptions.length),
             colorCheckAll: colorCheckedList.length === this.state.colorOptions.length,
         });
     }
 
-    onColorCheckAllChange(e){
+    onColorCheckAllChange(e) {
         this.setState({
             colorCheckedList: e.target.checked ? this.state.colorOptions : [],
             colorIndeterminate: false,
             colorCheckAll: e.target.checked,
         });
     }
-
 
 
     onIsRecommendChange(event) {
@@ -271,12 +299,16 @@ class AddView extends React.Component {
     updateColor(colorData) {
         var colorOptions = [];
         var idMap = new Map();
-
-        for(var index = 0; index < colorData.length; index++) {
+        var nameSet = new Set();
+        for (var index = 0; index < colorData.length; index++) {
             var color = colorData[index];
+            if (nameSet.has(color.colorName)) {
+                continue;
+            }
             colorOptions[index] = color.colorName;
             console.log(" color: " + color.colorName + ", id: " + color.id);
             idMap.set(color.colorName, color.id);
+            nameSet.add(color.colorName);
         }
 
         this.setState({

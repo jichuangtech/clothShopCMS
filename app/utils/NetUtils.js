@@ -1,8 +1,7 @@
 var React = require("react");
 
-
+const defaultToken = "123456";
 class NetUtils extends React.Component {
-
     /**
      * post请求
      * url : 请求地址
@@ -11,11 +10,16 @@ class NetUtils extends React.Component {
      * */
     static postJson(url, data, successCallback, failCallback, errorCallback) {
         console.log("postJson url: " + url + ", data: " + JSON.stringify(data));
+        let token = sessionStorage.getItem("access_token");
+        if (token === null || token === undefined) {
+            token = defaultToken;
+        }
         var fetchOption = {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
+                "access_token": token
             },
             body: JSON.stringify(data)
         };
@@ -32,26 +36,41 @@ class NetUtils extends React.Component {
     }
 
     /**
-     * get请求
+     * post请求
      * url : 请求地址
+     * data : 参数(Json对象)
      * callback : 回调函数
-     */
-    static getTest(url, callback) {
-        var fetchOptions = {
-            method: 'GET',
+     * */
+    static postJsonWithFile(url, data, successCallback, failCallback, errorCallback) {
+        console.log("postJson url: " + url + ", data: " + JSON.stringify(data));
+        let token = sessionStorage.getItem("access_token");
+        if (token === null || token === undefined) {
+            token = defaultToken;
+        }
+        var formData = new FormData();
+
+        for (var name in data) {
+            formData.append(name, data[name]);
+        }
+
+        var fetchOption = {
+            method: 'POST',
             headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                'host': "127.0.0.1",
-                'Access-Token': sessionStorage.getItem('access_token') || ''
-            }
+                'Accept': 'application/json, application/xml, text/plain, text/html, *.*',
+                'Content-Type': 'multipart/form-data',
+                "access_token": token
+            },
+            body: formData
         };
-        fetch(url, fetchOptions)
-            .then((response) => response.text())
-            .then((responseText) => {
-                callback(responseText);
-            }).catch((errorMsg) => {
-            console.log("getTest errorMsg: " + errorMsg);
+
+        fetch(url, fetchOption)
+            .then((response) => response.json())
+            .then((responseJson) => {
+                successCallback(responseJson);
+            }, function (failMsg) {
+                failCallback(failMsg)
+            }).catch(function (error) {
+            errorCallback(error)
         });
     }
 
@@ -73,18 +92,82 @@ class NetUtils extends React.Component {
                 url += '&' + paramsArray.join('&')
             }
         }
+        let token = sessionStorage.getItem("access_token");
+        if (token === null || token === undefined) {
+            token = defaultToken;
+        }
         //fetch请求
         fetch(url, {
             method: 'GET',
+            headers: {
+                "access_token": token
+            }
         }).then((response) => {
-            return response.json()
-        })
-            .then((responseJson) => {
-                successCallback(responseJson);
-            }, function (failMsg) {
+            return response.json();
+        }).then((responseJson) => {
+            successCallback(responseJson);
+        }, function (failMsg) {
+            if (failCallback) {
                 failCallback(failMsg)
-            }).catch((error) => {
-            errorCallback(error)
+            } else {
+                console.log("failMsg:::");
+                console.log(failMsg);
+            }
+        }).catch((error) => {
+            if (errorCallback) {
+                errorCallback(error);
+            } else {
+                console.log("errorCallback:::");
+                console.log(error);
+            }
+        });
+    }
+
+    /**
+     * 返回数据不解析成对象
+     * @param url
+     * @param params
+     * @param successCallback
+     * @param failCallback
+     * @param errorCallback
+     */
+    static getNormal(url, params, successCallback, failCallback, errorCallback) {
+        if (params) {
+            let paramsArray = [];
+            //拼接参数
+            Object.keys(params).forEach(key => paramsArray.push(key + '=' + params[key]))
+            if (url.search(/\?/) === -1) {
+                url += '?' + paramsArray.join('&')
+            } else {
+                url += '&' + paramsArray.join('&')
+            }
+        }
+        let token = sessionStorage.getItem("access_token");
+        if (token === null || token === undefined) {
+            token = defaultToken;
+        }
+        //fetch请求
+        fetch(url, {
+            method: 'GET',
+            headers: {
+                "access_token": token
+            }
+        }).then((responseJson) => {
+            successCallback(responseJson);
+        }, function (failMsg) {
+            if (failCallback) {
+                failCallback(failMsg)
+            } else {
+                console.log("failMsg:::");
+                console.log(failMsg);
+            }
+        }).catch((error) => {
+            if (errorCallback) {
+                errorCallback(error);
+            } else {
+                console.log("errorCallback:::");
+                console.log(error);
+            }
         });
     }
 
@@ -96,6 +179,10 @@ class NetUtils extends React.Component {
      * */
 
     static delete(url, params, successCB, failCB) {
+        let token = sessionStorage.getItem("access_token");
+        if (token === null || token === undefined) {
+            token = "";
+        }
         if (params) {
             let paramsArray = [];
             //拼接参数
