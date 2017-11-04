@@ -10,12 +10,11 @@
     flex-direction: row;
     background-color: #00d6b2;
     width: 100%;
-    height: 10%;
+    height: 40px;
 }
 
 .topNavItem {
-    margin-top: 1rem;
-    margin-left: 1rem;
+    margin: 5px;
 }
 
 .btns1 {

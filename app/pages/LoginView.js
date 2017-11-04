@@ -4,9 +4,10 @@
 var React = require("react");
 import {connect} from 'react-redux';
 import * as LoginAction from '../action/login';
-import {Form, Icon, Input, Button, Checkbox} from 'antd';
+import {Form, Icon, Input, Button, Checkbox, message} from 'antd';
 import * as LoginType from '../constant/loginType';
 import NetUtils from '../utils/NetUtils';
+import * as Urls from '../constant/Urls';
 
 const FormItem = Form.Item;
 import {
@@ -37,11 +38,12 @@ class NormalLoginForm extends React.Component {
                 var self = this;
                 this.props.dispatch({type: LoginType.LOGGED_ING})
                 // this.props.history.push("/main");
-                NetUtils.getNormal("http://127.0.0.1:8087/login?username=" + values["userName"] + "&password=" + values["password"], undefined, function (res) {
-                    alert(res);
+
+                NetUtils.getNormal(Urls.LOGIN_URL + "?username=" + values["userName"] + "&password=" + values["password"], undefined, function (res) {
                     if (res !== "no") {
                         sessionStorage.setItem("access_token", res);
-                        self.props.history.push("/main");
+                    } else {
+                        message.info("账号或者密码错误");
                     }
                 });
 

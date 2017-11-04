@@ -2,10 +2,12 @@
  * Created by Administrator on 2017/8/16.
  */
 var React = require("react");
-import {Button, message, Table} from 'antd';
+import {Button, message, Table, Spin} from 'antd';
 import SelectView from '../widgets/SelectView';
 import GoodsCategorySelectView from '../widgets/GoodsCategorySelectView';
 import AddGoodsDialog from './AddGoodsDialog';
+import NetUtils from '../../utils/NetUtils';
+import * as Urls from '../../constant/Urls';
 
 const columns = [{
     title: ' 图片',
@@ -59,6 +61,7 @@ class QueryView extends React.Component {
         super(props);
         this.state = {
             goodsData: [],
+            loading: false,
             goodsCategoryOptions: [
                 defaultOption
             ],
@@ -81,21 +84,17 @@ class QueryView extends React.Component {
         return (
             <div className="goodsBody">
                 <div style={{textAlign: "left", backgroundColor: "#E5F5F5"}}>
-                    <p style={{fontSize: "16", margin: "5"}}>商品>查看商品</p>
+                    <p style={{fontSize: "16px", margin: "5px"}}>商品>查看商品</p>
                 </div>
                 <div className="topNav">
-                    <AddGoodsDialog
-                        className="topNavItem"
-                        onOkClick={this.queryGoodsByCategoryId.bind(this, this.state.categoryOptionId)}/>
-
                     <GoodsCategorySelectView
                         isShowAllItem={true}
                         className="topNavItem"
                         optionChange={this.onGoodsCategoryOptionChange.bind(this)}/>
                 </div>
-
-                <Table columns={columns} dataSource={this.state.goodsData}/>
-
+                <Spin spinning={this.state.loading} style={{width: 0}}>
+                    <Table columns={columns} dataSource={this.state.goodsData}/>
+                </Spin>
             </div>
 
         );
@@ -123,42 +122,58 @@ class QueryView extends React.Component {
     }
 
     queryGoodsByCategoryId(categoryId) {
-        var self = this;
-        var url = "https://www.jichuangtech.site/clothshopserver/api/goodsCategories/"
-            + categoryId + "/goods";
-        console.log("queryGoodsByCategoryId url: " + url);
+        this.setState({
+            loading: true
+        });
 
-        fetch(url, {
-            method: 'GET',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-            }
-        }).then((response) => response.json())
-            .then(function (responseJson) {
-                console.log(" goods query 获取商品成功 ");
-                self.updateGoods(responseJson)
-            }, function (error) {
-                message.info("获取商品失败: " + error);
+        const self = this;
+        const url = Urls.GOOD_SCATEGORIES_URL + categoryId + "/goods";
+        console.log("queryGoodsByCategoryId url: " + url);
+        NetUtils.get(url, null, (responseJson) => {
+            self.updateGoods(responseJson);
+            this.setState({
+                loading: false
             });
+        }, (error) => {
+            message.info("获取商品失败: " + error);
+            this.setState({
+                loading: false
+            });
+        });
+
+        // fetch(url, {
+        //     method: 'GET',
+        //     headers: {
+        //         'Accept': 'application/json',
+        //         'Content-Type': 'application/json',
+        //     }
+        // }).then((response) => response.json())
+        //     .then(function (responseJson) {
+        //         console.log(" goods query 获取商品成功 ");
+        //         self.updateGoods(responseJson)
+        //     }, function (error) {
+        //         message.info("获取商品失败: " + error);
+        //     });
 
     }
 
     queryGoods() {
-        var url = "https://www.jichuangtech.site/clothshopserver/api/goods";
+        this.setState({
+            loading: true
+        });
+        var url = Urls.ADD_GOODS_URL;
         var self = this;
-        fetch(url, {
-            method: 'GET',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-            }
-        }).then((response) => response.json())
-            .then(function (responseJson) {
-                self.updateGoods(responseJson)
-            }, function (error) {
-                message.info("获取商品失败: " + error);
+        NetUtils.get(url, null, (responseJson) => {
+            this.setState({
+                loading: false
             });
+            self.updateGoods(responseJson);
+        }, (error) => {
+            message.info("获取商品失败: " + error);
+            this.setState({
+                loading: false
+            });
+        });
     }
 
     updateGoods(json) {

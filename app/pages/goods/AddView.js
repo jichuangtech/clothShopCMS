@@ -1,11 +1,12 @@
 var React = require("react");
-import {Modal, Button, message, Input, Row, Col, Radio, Checkbox, Upload, Icon} from 'antd';
+import {Modal, Button, message, Input, Row, Col, Radio, Checkbox, Upload, Icon, Form} from 'antd';
 import StringUtils from '../../utils/StringUtils';
 import GoodsCategorySelectView from '../widgets/GoodsCategorySelectView';
 import NetUtils from '../../utils/NetUtils';
 import * as Urls from "../../constant/Urls";
 import {connect} from 'react-redux';
 
+const FormItem = Form.Item;
 const RadioGroup = Radio.Group;
 const TitleSpan = 4;
 const ValueSpan = 8;
@@ -39,16 +40,25 @@ class AddView extends React.Component {
         })
     }
 
+    handleSubmit(e) {
+        e.preventDefault();
+        this.props.form.validateFieldsAndScroll((err, values) => {
+            if (!err) {
+                this.onPublicBtnClick(values);
+            }
+        });
+    }
 
     render() {
         const props = {
             beforeUpload: (file) => {
                 var isImage = false;
-                if (file.type === 'image/jpeg' || file.type === 'image/png') {
+                // || file.type === 'image/png'
+                if (file.type === 'image/jpeg') {
                     isImage = true;
                 }
                 if (!isImage) {
-                    message.error('请上传JPG或者PNG格式的图片!');
+                    message.error('请上传JPG的图片!');
                     return false;
                 }
                 this.setState(({image}) => ({
@@ -59,150 +69,252 @@ class AddView extends React.Component {
             fileList: this.state.image,
         };
 
+        const formItemLayout = {
+            labelCol: {
+                xs: {span: 24},
+                sm: {span: 6},
+            },
+            wrapperCol: {
+                xs: {span: 24},
+                sm: {span: 14},
+            },
+        };
+
+        const tailFormItemLayout = {
+            wrapperCol: {
+                xs: {
+                    span: 24,
+                    offset: 0,
+                },
+                sm: {
+                    span: 14,
+                    offset: 6,
+                },
+            },
+        };
+
+        const {getFieldDecorator} = this.props.form;
+
         return (<div className="modalDialogRoot">
-            <div style={{textAlign: "left", backgroundColor: "#E5F5F5"}}>
-                <p style={{fontSize: "16", margin: "5"}}>商品>查看商品</p>
+            <div style={{textAlign: "center", backgroundColor: "#E5F5F5"}}>
+                <h2 style={{fontSize: "25px", margin: "5px"}}>添加商品</h2>
             </div>
-            <Row>
-                <Col span={TitleSpan}><label>商品分类</label></Col>
-                <Col span={ValueSpan}>
+            <Form onSubmit={this.handleSubmit.bind(this)}>
+                <FormItem
+                    {...formItemLayout}
+                    label="商品分类"
+                    hasFeedback
+                >
                     <GoodsCategorySelectView
                         isShowAllItem={false}
                         onInfoQueryComplete={this.onGoodsCategorySelectViewComplete.bind(this)}
                         optionChange={this.onGoodsCategoryOptionChange.bind(this)}/>
-                </Col>
-            </Row>
+                </FormItem>
 
-            <Row>
-                <Col span={TitleSpan}><label>商品名称</label></Col>
-                <Col span={ValueSpan}><Input ref="name" className="addCateInput"/></Col>
-            </Row>
+                <FormItem
+                    {...formItemLayout}
+                    label="商品名称"
+                    hasFeedback
+                >
+                    {getFieldDecorator('name', {
+                        rules: [{
+                            min: 2, message: '商品名称至少要有两个字!',
+                        }, {
+                            required: true, message: '请输入商品名称!',
+                        }],
+                    })(
+                        <Input />
+                    )}
+                </FormItem>
 
-            <Row>
-                <Col span={TitleSpan}><label>商品编号</label></Col>
-                <Col span={ValueSpan}> <Input ref="goodsSn" className="addCateInput"/> </Col>
-            </Row>
-            <Row>
-                <Col span={TitleSpan}><label>商品图片</label></Col>
-                <Col span={ValueSpan}>
-                    <Upload {...props}>
-                        <Button>
-                            <Icon type="upload"/> Select File
-                        </Button>
-                    </Upload>
-                </Col>
-            </Row>
-            <Row>
-                <Col span={TitleSpan}><label>*库存</label></Col>
-                <Col span={ValueSpan}> <Input ref="storeCount" className="addCateInput"/> </Col>
-            </Row>
+                <FormItem
+                    {...formItemLayout}
+                    label="商品编号"
+                    hasFeedback
+                >
+                    {getFieldDecorator('goodsSn', {
+                        rules: [{
+                            min: 4, message: '商品编号至少4个字母!',
+                        }, {
+                            required: true, message: '请输入商品编号!',
+                        }],
+                    })(
+                        <Input />
+                    )}
+                </FormItem>
 
-            <Row>
-                <Col span={TitleSpan}><label>简单描述</label></Col>
-                <Col span={ValueSpan}> <Input ref="goodsRemark" className="addCateInput"/> </Col>
-            </Row>
+                <FormItem
+                    {...formItemLayout}
+                    label="库存"
+                    hasFeedback
+                >
+                    {getFieldDecorator('storeCount', {
+                        rules: [{
+                            pattern: '^[0-9]*$', message: '库存必须是数字!',
+                        }, {
+                            required: true, message: '请输入库存数量!',
+                        }]
+                    })(
+                        <Input />
+                    )}
+                </FormItem>
 
-            <Row>
-                <Col span={TitleSpan}><label>详细描述</label></Col>
-                <Col span={ValueSpan}> <Input ref="goodsContent" className="addCateInput"/> </Col>
-            </Row>
+                <FormItem
+                    {...formItemLayout}
+                    label="简单描述"
+                    hasFeedback
+                >
+                    {getFieldDecorator('goodsRemark')(
+                        <Input />
+                    )}
+                </FormItem>
 
-            <Row>
-                <Col span={TitleSpan}><label>是否热销</label></Col>
-                <Col span={ValueSpan}>
-                    <RadioGroup onChange={this.onIsHotChange.bind(this)} value={this.state.isHot}>
-                        <Radio value={1}>是</Radio>
-                        <Radio value={0}>否</Radio>
-                    </RadioGroup>
-                </Col>
-            </Row>
+                <FormItem
+                    {...formItemLayout}
+                    label="详细描述"
+                    hasFeedback
+                >
+                    {getFieldDecorator('goodsContent')(
+                        <Input />
+                    )}
+                </FormItem>
 
-            <Row>
-                <Col span={TitleSpan}><label>是否推荐</label></Col>
-                <Col span={ValueSpan}>
-                    <RadioGroup onChange={this.onIsRecommendChange.bind(this)} value={this.state.isRecommend}>
-                        <Radio value={1}>是</Radio>
-                        <Radio value={0}>否</Radio>
-                    </RadioGroup>
-                </Col>
-            </Row>
+                <FormItem
+                    {...formItemLayout}
+                    label="是否热销"
+                    hasFeedback
+                >
+                    {getFieldDecorator('isHot', {
+                        rules: [{
+                            required: true, message: '请选择是否热销!',
+                        }], valuePropName: 'isHot', initialValue: this.state.isHot
+                    })(
+                        <RadioGroup onChange={this.onIsHotChange.bind(this)} value={this.state.isHot}>
+                            <Radio value={1}>是</Radio>
+                            <Radio value={0}>否</Radio>
+                        </RadioGroup>
+                    )}
+                </FormItem>
 
-            <Row>
-                <Col span={TitleSpan}><label>价格</label></Col>
-                <Col span={ValueSpan}>
-                    <div>
-                        <Checkbox name="codeCheck" onChange={this.onCodeChange.bind(this)}>码</Checkbox>
-                        <Input ref="codePrice" placeholder="价格/码"
-                               className="addCateInput" disabled={!this.state.isCodeCheck}/>
-                    </div>
-                    <div>
-                        <Checkbox name="kgCheck" onChange={this.onKgChange.bind(this)}>千克</Checkbox>
-                        <Input ref="kgPrice" placeholder="价格/千克"
-                               className="addCateInput" disabled={!this.state.isKgCheck}/>
-                    </div>
-                </Col>
-            </Row>
+                <FormItem
+                    {...formItemLayout}
+                    label="是否推荐"
+                    hasFeedback
+                >
+                    {getFieldDecorator('isRecommend', {
+                        rules: [{
+                            required: true, message: '请选择是否推荐!',
+                        }], valuePropName: 'isRecommend', initialValue: this.state.isRecommend
+                    })(
+                        <RadioGroup onChange={this.onIsRecommendChange.bind(this)} value={this.state.isRecommend}>
+                            <Radio value={1}>是</Radio>
+                            <Radio value={0}>否</Radio>
+                        </RadioGroup>
+                    )}
+                </FormItem>
 
-            <Row>
-                <Col span={TitleSpan}><label>添加颜色</label></Col>
-                <Col span={ValueSpan + 4}>
-                    <CheckboxGroup options={this.state.colorOptions}
-                                   value={this.state.colorCheckedList}
-                                   onChange={this.onColorCheckChange.bind(this)}/>
-                    |<Checkbox
-                    indeterminate={this.state.colorIndeterminate}
-                    onChange={this.onColorCheckAllChange.bind(this)}
-                    checked={this.state.colorCheckAll}>
-                    全选
-                </Checkbox>
-                </Col>
-            </Row>
+                <FormItem
+                    {...formItemLayout}
+                    label="规格"
+                    hasFeedback
+                >
+                    {getFieldDecorator('isCodeCheck')(
+                        <div>
+                            <Checkbox name="codeCheck" onChange={this.onCodeChange.bind(this)}>码</Checkbox>
+                            <Input ref="codePrice" placeholder="价格/码"
+                                   className="addCateInput" disabled={!this.state.isCodeCheck}/>
+                        </div>
+                    )}
+                </FormItem>
 
-            <hr/>
-            <Button onClick={this.onPublicBtnClick.bind(this)}>发布</Button>
+                <FormItem
+                    {...formItemLayout}
+                    label="规格"
+                    hasFeedback
+                >
+                    {getFieldDecorator('isKgCheck')(
+                        <div>
+                            <Checkbox name="kgCheck" onChange={this.onKgChange.bind(this)}>千克</Checkbox>
+                            <Input ref="kgPrice" placeholder="价格/千克"
+                                   className="addCateInput" disabled={!this.state.isKgCheck}/>
+                        </div>
+                    )}
+                </FormItem>
+
+                <FormItem
+                    {...formItemLayout}
+                    label="颜色选择"
+                    hasFeedback
+                >
+                    {getFieldDecorator('colorSelect')(
+                        <div>
+                            <CheckboxGroup options={this.state.colorOptions}
+                                           value={this.state.colorCheckedList}
+                                           onChange={this.onColorCheckChange.bind(this)}/>
+                            | <Checkbox
+                            indeterminate={this.state.colorIndeterminate}
+                            onChange={this.onColorCheckAllChange.bind(this)}
+                            checked={this.state.colorCheckAll}>
+                            全选
+                        </Checkbox>
+                        </div>
+                    )}
+                </FormItem>
+
+                <FormItem
+                    {...formItemLayout}
+                    label="商品图片"
+                    hasFeedback
+                >
+                    {getFieldDecorator('image')(
+                        <Upload {...props}>
+                            <Button>
+                                <Icon type="upload"/> Select File
+                            </Button>
+                        </Upload>
+                    )}
+                </FormItem>
+
+                <FormItem {...tailFormItemLayout}>
+                    <Button type="primary" htmlType="submit">发布</Button>
+                </FormItem>
+            </Form>
+
+            {/*<hr/>*/}
+            {/*<Button onClick={this.onPublicBtnClick.bind(this)}>发布</Button>*/}
 
         </div>);
     }
 
-    onPublicBtnClick() {
-
+    onPublicBtnClick(values) {
         if (this.checkValid()) {
-            this.publicGoods();
-        } else {
-            message.info("参数无效");
+            this.publicGoods(values);
         }
     }
 
-    publicGoods() {
+    publicGoods(values) {
+        let form = this.props.form;
         var goodsVO = {};
+        // let fieldsValue = form.getFieldsValue('isKgCheck');
+        // console.log(fieldsValue);
 
-        goodsVO.goodsName = this.refs.name.refs.input.value;
+        goodsVO.goodsName = values['name'];
         goodsVO.categoryId = this.state.categoryId;
-        goodsVO.goodsSn = this.refs.goodsSn.refs.input.value;
-        goodsVO.storeCount = this.refs.storeCount.refs.input.value;
-        goodsVO.goodsRemark = this.refs.goodsRemark.refs.input.value;
-        goodsVO.goodsContent = this.refs.goodsContent.refs.input.value;
+        goodsVO.goodsSn = values['goodsSn'];
+        goodsVO.storeCount = values['storeCount'];
+        goodsVO.goodsRemark = values['goodsRemark'];
+        goodsVO.goodsContent = values['goodsContent'];
         goodsVO.isRecommend = this.state.isRecommend ? 1 : 0;
         goodsVO.isHot = this.state.isHot ? 1 : 0;
 
-        var specs = [];
         if (this.state.isKgCheck) {
-            var spec = {};
-            spec.specId = 1;
-            spec.price = this.refs.kgPrice.refs.input.value;
-            specs.push(spec);
+            goodsVO.kgPrice = this.refs.kgPrice.refs.input.value;
         }
-
         if (this.state.isCodeCheck) {
-            var spec = {};
-            spec.specId = 2;
-            spec.price = this.refs.codePrice.refs.input.value;
-            specs.push(spec);
+            goodsVO.codePrice = this.refs.codePrice.refs.input.value;
         }
-        goodsVO.specs = specs;
 
         var colorIds = [];
-
         var colorIdMap = this.state.colorIdMap;
         var colorCheckedList = this.state.colorCheckedList;
         /**
@@ -214,18 +326,36 @@ class AddView extends React.Component {
         }
         goodsVO.colorIds = colorIds;
         goodsVO.image = this.state.image[0];
+        console.log(goodsVO);
         NetUtils.postJsonWithFile(Urls.ADD_GOODS_URL, goodsVO, function (response) {
-            console.log("发布商品成功 response: " + JSON.stringify(response));
-        }, function () {
-            console.log("发布商品失败");
+            message.info("发布商品成功");
+            form.resetFields();
+            // self.props.history.push("/main/goods/query");
+        }, function (error) {
+            console.log("发布商品失败1", error);
+        }, (error) => {
+            console.log("发布商品失败2", error);
         })
 
     }
 
     checkValid() {
-        var valid = true;
-
-        return valid;
+        if (this.state.image.length === 0) {
+            message.info("请选择一张商品图片上传");
+            return false;
+        }
+        var reg = new RegExp("^[0-9]*$");
+        var codePrice = this.refs.codePrice.refs.input.value;
+        var kgPrice = this.refs.kgPrice.refs.input.value;
+        if (!reg.test(codePrice)) {
+            message.info("价格/码请选择输入数字");
+            return false;
+        }
+        if (!reg.test(kgPrice)) {
+            message.info("价格/千克请选择输入数字");
+            return false;
+        }
+        return true;
     }
 
 
@@ -316,8 +446,9 @@ class AddView extends React.Component {
             colorIdMap: idMap
         });
     }
-
 }
+
+const WrappedNormalAddView = Form.create()(AddView);
 
 //state 对象，就是经过 combineReducers()创建出来的
 const mapStateToProps = state => ({
@@ -325,4 +456,4 @@ const mapStateToProps = state => ({
 })
 
 // export default AddView;
-export default connect(mapStateToProps)(AddView);
+export default connect(mapStateToProps)(WrappedNormalAddView);

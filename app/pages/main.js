@@ -84,7 +84,7 @@ class MainPage extends React.Component {
 
                 </Header>
 
-                <Layout style={{height: 600}}>
+                <Layout style={{height: "100%"}}>
                     <Sider width={200}
                            collapsed={this.state.collapsed}
                            onCollapse={this.onCollapse}

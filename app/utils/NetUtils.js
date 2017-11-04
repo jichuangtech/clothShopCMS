@@ -18,8 +18,7 @@ class NetUtils extends React.Component {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                "access_token": token
+                'Content-Type': 'application/json'
             },
             body: JSON.stringify(data)
         };
@@ -55,18 +54,12 @@ class NetUtils extends React.Component {
 
         var fetchOption = {
             method: 'POST',
-            headers: {
-                'Accept': 'application/json, application/xml, text/plain, text/html, *.*',
-                'Content-Type': 'multipart/form-data',
-                "access_token": token
-            },
             body: formData
         };
 
         fetch(url, fetchOption)
-            .then((response) => response.json())
-            .then((responseJson) => {
-                successCallback(responseJson);
+            .then((data) => {
+                successCallback(data);
             }, function (failMsg) {
                 failCallback(failMsg)
             }).catch(function (error) {
@@ -98,10 +91,7 @@ class NetUtils extends React.Component {
         }
         //fetch请求
         fetch(url, {
-            method: 'GET',
-            headers: {
-                "access_token": token
-            }
+            method: 'GET'
         }).then((response) => {
             return response.json();
         }).then((responseJson) => {
@@ -148,10 +138,7 @@ class NetUtils extends React.Component {
         }
         //fetch请求
         fetch(url, {
-            method: 'GET',
-            headers: {
-                "access_token": token
-            }
+            method: 'GET'
         }).then((responseJson) => {
             successCallback(responseJson);
         }, function (failMsg) {
