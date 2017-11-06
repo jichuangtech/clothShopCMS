@@ -1,17 +1,37 @@
 var React = require("react");
-import {Modal, Button, message, Input} from 'antd';
+import {Modal, Button, message, Input, Upload, Icon} from 'antd';
 import StringUtils from '../../utils/StringUtils';
-
+import NetUtils from '../../utils/NetUtils';
+import * as Urls from "../../constant/Urls";
 class AddCategoryDialog extends React.Component {
 
     constructor(props) {
         super(props);
         this.state = {
             visible: false,
+            image: []
         };
     }
 
     render() {
+        const props = {
+            beforeUpload: (file) => {
+                var isImage = false;
+                // || file.type === 'image/png'
+                if (file.type === 'image/jpeg') {
+                    isImage = true;
+                }
+                if (!isImage) {
+                    message.error('请上传JPG的图片!');
+                    return false;
+                }
+                this.setState(({image}) => ({
+                    image: [file],
+                }));
+                return false;
+            },
+            fileList: this.state.image,
+        };
         return (
             <div className={this.props.className}>
                 <Button onClick={this.showDialog.bind(this)}>发布商品分类</Button>
@@ -23,53 +43,49 @@ class AddCategoryDialog extends React.Component {
                     okText="新增"
                     cancelText="退出"
                 >
-                    <Input placeholder="商品分类" ref="name" className="addCateInput"/> <br/>
-                    <Input placeholder="商品分类图片" ref="image" className="addCateInput"/> <br/>
+                    <Input placeholder="商品分类" ref="name" className="addCateInput"/> <br/><br/>
+                    <Upload {...props}>
+                        <Button>
+                            <Icon type="upload"/> 选择图片
+                        </Button>
+                    </Upload>
+                    <br/>
                 </Modal>
             </div>
         );
     }
 
     onAddBtnClick() {
-        this.addCate(this.refs.name.refs.input.value, this.refs.image.refs.input.value);
+        this.addCate(this.refs.name.refs.input.value);
     }
 
-    addCate(name, image) {
-        if(StringUtils.isNullOrEmpty(name)) {
+    addCate(name) {
+        if (StringUtils.isNullOrEmpty(name)) {
             message.info("商品分类名不能为空.");
             return;
         }
 
-        if(StringUtils.isNullOrEmpty(image)) {
-            message.info("商品分类图片名不能为空.");
+        if (this.state.image.length == 0) {
+            message.info("请选择商品分类图片.");
             return;
         }
 
         var cate = {
             name: name,
-            image: image
+            image: this.state.image[0]
         }
-
-        // var url = "http://localhost:8070/api/goodsCategories";
-        var url = "https://www.jichuangtech.site/clothshopserver/api/goodsCategories";
-
         var self = this;
-
-        fetch(url,{
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(cate)
-        }).then((response) => response.text())
-            .then(function (responseJson) {
-                //如果添加成功
-                message.info("添加成功! ");
-                self.hideDialog();
-            }, function (error) {
-                message.info("添加商品分类失败");
+        NetUtils.postJsonWithFile(Urls.GOODS_CATEGORY, cate, function (response) {
+            message.info("发布商品分类成功");
+            self.setState({
+                visible: false
             });
+            // self.props.history.push("/main/goods/query");
+        }, function (error) {
+            console.log("发布商品分类1", error);
+        }, (error) => {
+            console.log("发布商品分类2", error);
+        })
 
     }
 

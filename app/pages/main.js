@@ -108,10 +108,6 @@ class MainPage extends React.Component {
                             <SubMenu key="sub2" title={<span><Icon type="switcher"/><span>商品分类</span></span>}>
                                 <Menu.Item key="5"><Link
                                     to={`${this.props.match.url}/goodsCategory/query`}>查看</Link></Menu.Item>
-                                <Menu.Item key="6"><Link
-                                    to={`${this.props.match.url}/goodsCategory/add`}>添加</Link></Menu.Item>
-                                <Menu.Item key="7"><Link
-                                    to={`${this.props.match.url}/goodsCategory/delete`}>删除</Link></Menu.Item>
                             </SubMenu>
                             <SubMenu key="sub4" title={<span><Icon type="shop"/><span>订单</span></span>}>
                                 <Menu.Item key="9"><Link

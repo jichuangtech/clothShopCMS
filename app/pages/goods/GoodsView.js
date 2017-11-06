@@ -19,7 +19,6 @@ class GoodsView extends React.Component {
             action: ActionType.QUERY
         }
 
-        viewMap.set(ActionType.ADD, (<AddView/>));
         viewMap.set(ActionType.QUERY, (<QueryView/>));
     }
 

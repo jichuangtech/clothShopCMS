@@ -3,8 +3,7 @@
  */
 var React = require("react");
 import QueryView from "./QueryView"
-import AddView from "./AddView"
-import DeleteView from "./DeleteView"
+import * as Urls from "../../constant/Urls";
 import  * as ActionType from '../../constant/ActionType';
 
 
@@ -21,9 +20,7 @@ class GoodsCategoryView extends React.Component {
             action:ActionType.QUERY
         }
 
-        viewMap.set(ActionType.ADD, (<AddView/>));
         viewMap.set(ActionType.QUERY, (<QueryView/>));
-        viewMap.set(ActionType.DELETE, (<DeleteView/>));
     }
 
 

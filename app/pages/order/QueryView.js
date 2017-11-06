@@ -4,7 +4,7 @@
 var React = require("react");
 import {Button, message, Table, Select, Modal, Row, Col, Input, Spin} from 'antd';
 import NetUtils from '../../utils/NetUtils';
-
+import * as Urls from "../../constant/Urls";
 const TitleSpan = 4;
 const ValueSpan = 8;
 const columns = [{
@@ -180,11 +180,11 @@ class QueryView extends React.Component {
     handleOk() {
         console.log(this.state.orderStatus);
         let self = this;
-        NetUtils.postJson(`https://www.jichuangtech.site/clothshopserver/api/order/${this.state.userId}/orderstatus/${this.state.orderId}/${this.state.orderStatus}`, {}, function (data) {
+        NetUtils.postJson(Urls.PRE_FIX + `/api/order/${this.state.userId}/orderstatus/${this.state.orderId}/${this.state.orderStatus}`, {}, function (data) {
             message.info('保存成功');
             self.queryOrders();
         }, function (data) {
-            alert("保存失败");
+            // alert("保存失败");
         });
 
         this.setState({
@@ -204,32 +204,25 @@ class QueryView extends React.Component {
         if (userId === undefined) {
             userId = 0;
         }
-        var url = `https://www.jichuangtech.site/clothshopserver/api/order/${userId}`;
+        var url = Urls.PRE_FIX + `/api/order/${userId}`;
         var self = this;
-        fetch(url, {
-            method: 'GET',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-            }
-        }).then((response) => response.json())
-            .then(function (responseJson) {
-                self.updateOrders(responseJson);
-                self.setState({
-                    loading: false
-                });
-            }, function (error) {
-                message.info("获取订单失败: " + error);
-                self.setState({
-                    loading: false
-                });
+        NetUtils.get(url, [], (data) => {
+            self.updateOrders(data);
+            self.setState({
+                loading: false
             });
+        }, (error) => {
+            message.info("获取订单失败: " + error);
+            self.setState({
+                loading: false
+            });
+        });
     }
 
     queryUser() {
         var users = [];
         users.push(<Option key="0" value="0">全部用户</Option>);
-        NetUtils.get("https://www.jichuangtech.site/clothshopserver/list", {}, function (data) {
+        NetUtils.get(Urls.PRE_FIX + "/list", [], function (data) {
             console.log(data);
             for (var index = 0; index < data.length; index++) {
                 let userId = data[index].userId;

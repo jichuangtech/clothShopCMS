@@ -127,7 +127,7 @@ class QueryView extends React.Component {
         });
 
         const self = this;
-        const url = Urls.GOOD_SCATEGORIES_URL + categoryId + "/goods";
+        const url = Urls.GOOD_SCATEGORIES_URL + "/" + categoryId + "/goods";
         console.log("queryGoodsByCategoryId url: " + url);
         NetUtils.get(url, null, (responseJson) => {
             self.updateGoods(responseJson);
@@ -135,7 +135,8 @@ class QueryView extends React.Component {
                 loading: false
             });
         }, (error) => {
-            message.info("获取商品失败: " + error);
+            message.info("获取商品失败: ");
+            console.log(error);
             this.setState({
                 loading: false
             });
@@ -169,7 +170,8 @@ class QueryView extends React.Component {
             });
             self.updateGoods(responseJson);
         }, (error) => {
-            message.info("获取商品失败: " + error);
+            message.info("获取商品失败: ");
+            console.log(error);
             this.setState({
                 loading: false
             });
@@ -200,19 +202,16 @@ class QueryView extends React.Component {
 
     queryCategory() {
         var url = "https://www.jichuangtech.site/clothshopserver/api/goodsCategories";
+        ;
+
+
         var self = this;
-        fetch(url, {
-            method: 'GET',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-            }
-        }).then((response) => response.json())
-            .then(function (responseJson) {
-                self.updateCategoryOptions(responseJson)
-            }, function (error) {
-                message.info("获取商品分类失败: " + error);
-            });
+        NetUtils.get(Urls.GOODS_CATEGORY, [], (data) => {
+            self.updateCategoryOptions(data);
+        }, (error) => {
+            message.info("获取商品分类失败: ");
+            console.log(error);
+        });
     }
 
     updateCategoryOptions(json) {
