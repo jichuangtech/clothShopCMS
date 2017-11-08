@@ -20,6 +20,7 @@ class NetUtils extends React.Component {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             },
+            credentials: "include",
             body: JSON.stringify(data)
         };
 
@@ -54,6 +55,7 @@ class NetUtils extends React.Component {
 
         var fetchOption = {
             method: 'POST',
+            credentials: "include",
             body: formData
         };
 
@@ -85,15 +87,18 @@ class NetUtils extends React.Component {
                 url += '&' + paramsArray.join('&')
             }
         }
-        let token = sessionStorage.getItem("access_token");
-        if (token === null || token === undefined) {
-            token = defaultToken;
-        }
         //fetch请求
         fetch(url, {
-            method: 'GET'
+            method: 'GET',
+            credentials: "include",
+            headers: {
+                'Accept': 'application/json'
+            }
         }).then((response) => {
-            return response.json();
+            if (response.ok) {
+                return response.json();
+            }
+            return {};
         }).then((responseJson) => {
             successCallback(responseJson);
         }, function (failMsg) {
@@ -138,7 +143,8 @@ class NetUtils extends React.Component {
         }
         //fetch请求
         fetch(url, {
-            method: 'GET'
+            method: 'GET',
+            credentials: "include"
         }).then((responseJson) => {
             successCallback(responseJson);
         }, function (failMsg) {
@@ -183,6 +189,7 @@ class NetUtils extends React.Component {
         //fetch请求
         fetch(url, {
             method: 'DELETE',
+            credentials: "include"
         }).then((response) => response.json())
             .then((responseJson) => {
                 successCB(responseJson);

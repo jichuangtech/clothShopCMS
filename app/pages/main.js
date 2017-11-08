@@ -84,7 +84,7 @@ class MainPage extends React.Component {
 
                 </Header>
 
-                <Layout style={{height: "100%"}}>
+                <Layout style={{height: "100%", minHeight: '550px'}}>
                     <Sider width={200}
                            collapsed={this.state.collapsed}
                            onCollapse={this.onCollapse}
@@ -112,10 +112,6 @@ class MainPage extends React.Component {
                             <SubMenu key="sub4" title={<span><Icon type="shop"/><span>订单</span></span>}>
                                 <Menu.Item key="9"><Link
                                     to={`${this.props.match.url}/order/query`}>查看</Link></Menu.Item>
-                                <Menu.Item key="10"><Link
-                                    to={`${this.props.match.url}/order/add`}>添加</Link></Menu.Item>
-                                <Menu.Item key="11"><Link
-                                    to={`${this.props.match.url}/order/delete`}>删除</Link></Menu.Item>
                             </SubMenu>
                         </Menu>
                     </Sider>

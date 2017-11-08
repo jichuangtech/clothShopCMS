@@ -41,7 +41,6 @@ class NormalLoginForm extends React.Component {
 
                 NetUtils.getNormal(Urls.LOGIN_URL + "?username=" + values["userName"] + "&password=" + values["password"], undefined, function (res) {
                     if (res !== "no") {
-                        sessionStorage.setItem("access_token", res);
                         self.props.history.push("/main/goods/query");
                     } else {
                         message.info("账号或者密码错误");
