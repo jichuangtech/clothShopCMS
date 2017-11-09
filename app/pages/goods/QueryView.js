@@ -14,7 +14,7 @@ const columns = [{
     dataIndex: 'image',
     key: 'image',
     render: function (text, record) {
-        var image = "https://www.jichuangtech.site/clothshopserver/api/goods/picture/" + record.image;
+        var image = "https://www.jichuangtech.site/clothshopserver/api/goodsCategories/picture/" + record.image;
         return (<img style={{width: 34, height: 34}}
                      src={image}/>);
     }
