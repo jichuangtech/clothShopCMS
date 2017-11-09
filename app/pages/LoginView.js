@@ -39,13 +39,17 @@ class NormalLoginForm extends React.Component {
                 this.props.dispatch({type: LoginType.LOGGED_ING})
                 // this.props.history.push("/main");
 
-                NetUtils.getNormal(Urls.LOGIN_URL + "?username=" + values["userName"] + "&password=" + values["password"], undefined, function (res) {
-                    if (res !== "no") {
-                        sessionStorage.setItem("access_token", res);
+                NetUtils.get(Urls.LOGIN_URL + "?username=" + values["userName"] + "&password=" + values["password"], undefined, function (res) {
+                    res = JSON.parse(res);
+                    if (res.msg === "ok") {
+                        console.log("res===" + res);
+                        sessionStorage.setItem("access_token", res.data);
                         self.props.history.push("/main/goods/query");
                     } else {
                         message.info("账号或者密码错误");
                     }
+                }, (error) => {
+                    console.log("error===:" + error);
                 });
 
             }

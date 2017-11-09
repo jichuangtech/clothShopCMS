@@ -94,6 +94,8 @@ class NetUtils extends React.Component {
         if (token === null || token === undefined) {
             token = defaultToken;
         }
+        // alert(token);
+        console.log("token====", token);
         //fetch请求
         fetch(url, {
             method: 'GET',
@@ -106,54 +108,6 @@ class NetUtils extends React.Component {
                 return response.json();
             }
             return {};
-        }).then((responseJson) => {
-            successCallback(responseJson);
-        }, function (failMsg) {
-            if (failCallback) {
-                failCallback(failMsg)
-            } else {
-                console.log("failMsg:::");
-                console.log(failMsg);
-            }
-        }).catch((error) => {
-            if (errorCallback) {
-                errorCallback(error);
-            } else {
-                console.log("errorCallback:::");
-                console.log(error);
-            }
-        });
-    }
-
-    /**
-     * 返回数据不解析成对象
-     * @param url
-     * @param params
-     * @param successCallback
-     * @param failCallback
-     * @param errorCallback
-     */
-    static getNormal(url, params, successCallback, failCallback, errorCallback) {
-        if (params) {
-            let paramsArray = [];
-            //拼接参数
-            Object.keys(params).forEach(key => paramsArray.push(key + '=' + params[key]))
-            if (url.search(/\?/) === -1) {
-                url += '?' + paramsArray.join('&')
-            } else {
-                url += '&' + paramsArray.join('&')
-            }
-        }
-        let token = sessionStorage.getItem("access_token");
-        if (token === null || token === undefined) {
-            token = defaultToken;
-        }
-        //fetch请求
-        fetch(url, {
-            method: 'GET',
-            headers: {
-                'access-token': token
-            }
         }).then((responseJson) => {
             successCallback(responseJson);
         }, function (failMsg) {
