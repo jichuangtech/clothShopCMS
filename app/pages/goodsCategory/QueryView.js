@@ -50,7 +50,7 @@ class QueryView extends React.Component {
 
     deleteCategory(categoryId) {
         var self = this;
-        var url = Urls.GOOD_SCATEGORIES_URL;
+        var url = Urls.GOODS_CATEGORIES_URL;
 
         var params = [];
         params["categoryId"] = categoryId;

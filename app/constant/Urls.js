@@ -3,7 +3,7 @@ const PRE_FIX = "http://localhost:8087";
 
 const COLOR_URL = PRE_FIX + "/api/goodsInfo/color";
 const ADD_GOODS_URL = PRE_FIX + "/api/goods";
-const GOOD_SCATEGORIES_URL = PRE_FIX + "/api/goodsCategories";
+const GOODS_CATEGORIES_URL = PRE_FIX + "/api/goodsCategories";
 const LOGIN_URL = PRE_FIX + "/login";
 const GOODS_CATEGORY = PRE_FIX + "/api/goodsCategories";
 
@@ -18,7 +18,7 @@ export {
     REGISTER_FAIL,
     REGISTER_ERROR,
     ADD_GOODS_URL,
-    GOOD_SCATEGORIES_URL,
+    GOODS_CATEGORIES_URL,
     LOGIN_URL,
     GOODS_CATEGORY
 }

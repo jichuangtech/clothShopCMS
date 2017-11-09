@@ -127,7 +127,7 @@ class QueryView extends React.Component {
         });
 
         const self = this;
-        const url = Urls.GOOD_SCATEGORIES_URL + "/" + categoryId + "/goods";
+        const url = Urls.GOODS_CATEGORIES_URL + "/" + categoryId + "/goods";
         console.log("queryGoodsByCategoryId url: " + url);
         NetUtils.get(url, null, (responseJson) => {
             self.updateGoods(responseJson);
