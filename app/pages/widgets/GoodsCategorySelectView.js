@@ -37,7 +37,7 @@ class GoodsCategorySelectView extends React.Component {
     }
 
     queryCategory() {
-        var url = Urls.GOOD_SCATEGORIES_URL;
+        var url = Urls.GOODS_CATEGORIES_URL;
         var self = this;
         NetUtils.get(url, null, (responseJson) => {
             self.updateCategoryOptions(responseJson);
