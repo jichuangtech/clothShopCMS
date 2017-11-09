@@ -18,9 +18,10 @@ class NetUtils extends React.Component {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'access-token': token
+
             },
-            credentials: "include",
             body: JSON.stringify(data)
         };
 
@@ -55,8 +56,10 @@ class NetUtils extends React.Component {
 
         var fetchOption = {
             method: 'POST',
-            credentials: "include",
-            body: formData
+            body: formData,
+            headers: {
+                'access-token': token
+            }
         };
 
         fetch(url, fetchOption)
@@ -87,12 +90,16 @@ class NetUtils extends React.Component {
                 url += '&' + paramsArray.join('&')
             }
         }
+        let token = sessionStorage.getItem("access_token");
+        if (token === null || token === undefined) {
+            token = defaultToken;
+        }
         //fetch请求
         fetch(url, {
             method: 'GET',
-            credentials: "include",
             headers: {
-                'Accept': 'application/json'
+                'Accept': 'application/json',
+                'access-token': token
             }
         }).then((response) => {
             if (response.ok) {
@@ -144,7 +151,9 @@ class NetUtils extends React.Component {
         //fetch请求
         fetch(url, {
             method: 'GET',
-            credentials: "include"
+            headers: {
+                'access-token': token
+            }
         }).then((responseJson) => {
             successCallback(responseJson);
         }, function (failMsg) {
@@ -189,7 +198,10 @@ class NetUtils extends React.Component {
         //fetch请求
         fetch(url, {
             method: 'DELETE',
-            credentials: "include"
+            headers: {
+                'access-token': token
+            }
+
         }).then((response) => response.json())
             .then((responseJson) => {
                 successCB(responseJson);

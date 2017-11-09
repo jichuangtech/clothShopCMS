@@ -50,7 +50,7 @@ class QueryView extends React.Component {
 
     deleteCategory(categoryId) {
         var self = this;
-        var url = "https://www.jichuangtech.site/clothshopserver/api/goodsCategories";
+        var url = Urls.GOOD_SCATEGORIES_URL;
 
         var params = [];
         params["categoryId"] = categoryId;
@@ -85,7 +85,6 @@ class QueryView extends React.Component {
     }
 
     queryCategory() {
-        var url = "https://www.jichuangtech.site/clothshopserver/api/goodsCategories";
         var self = this;
 
         NetUtils.get(Urls.GOODS_CATEGORY, null, (data) => {
