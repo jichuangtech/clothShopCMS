@@ -19,7 +19,7 @@ class NetUtils extends React.Component {
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
-                'access-token': token
+                'access_token': token
 
             },
             body: JSON.stringify(data)
@@ -58,7 +58,7 @@ class NetUtils extends React.Component {
             method: 'POST',
             body: formData,
             headers: {
-                'access-token': token
+                'access_token': token
             }
         };
 
@@ -101,7 +101,7 @@ class NetUtils extends React.Component {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',
-                'access-token': token
+                'access_token': token
             }
         }).then((response) => {
             if (response.ok) {
@@ -153,7 +153,7 @@ class NetUtils extends React.Component {
         fetch(url, {
             method: 'DELETE',
             headers: {
-                'access-token': token
+                'access_token': token
             }
 
         }).then((response) => response.json())
