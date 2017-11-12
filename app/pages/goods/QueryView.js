@@ -162,7 +162,7 @@ class QueryView extends React.Component {
         this.setState({
             loading: true
         });
-        var url = Urls.ADD_GOODS_URL;
+        var url = Urls.GOODS_URL;
         var self = this;
         NetUtils.get(url, null, (responseJson) => {
             this.setState({
@@ -179,17 +179,18 @@ class QueryView extends React.Component {
     }
 
     updateGoods(json) {
+        let goodsObj  = json.data;
         var goods = [];
 
-        for (var index = 0; index < json.length; index++) {
+        for (var index = 0; index < goodsObj.length; index++) {
 
             var row = {
                 key: '' + index,
-                goods: json[index].goodsName,
-                image: json[index].originalImg,
-                title: json[index].goodsRemark,
-                storeCount: json[index].storeCount,
-                id: json[index].id
+                goods: goodsObj[index].goodsName,
+                image: goodsObj[index].originalImg,
+                title: goodsObj[index].goodsRemark,
+                storeCount: goodsObj[index].storeCount,
+                id: goodsObj[index].id
             };
 
             goods.push(row);
@@ -201,12 +202,8 @@ class QueryView extends React.Component {
     }
 
     queryCategory() {
-        var url = "https://www.jichuangtech.site/clothshopserver/api/goodsCategories";
-        ;
-
-
         var self = this;
-        NetUtils.get(Urls.GOODS_CATEGORY, [], (data) => {
+        NetUtils.get(Urls.GOODS_CATEGORIES_URL, [], (data) => {
             self.updateCategoryOptions(data);
         }, (error) => {
             message.info("获取商品分类失败: ");

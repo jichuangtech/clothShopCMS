@@ -118,7 +118,6 @@ class QueryView extends React.Component {
     render() {
         return (
             <div className="goodsBody">
-
                 <Select style={{width: 120}} defaultValue="0" onChange={this.handleUserChange.bind(this)}>
                     {this.state.userData}
                 </Select>
@@ -165,9 +164,9 @@ class QueryView extends React.Component {
     }
 
     handleUserChange(value) {
-        this.setState({
-            selectUserId: value
-        });
+        // this.setState({
+        //     selectUserId: value
+        // });
         this.queryOrders(value);
     }
 
@@ -224,9 +223,14 @@ class QueryView extends React.Component {
         users.push(<Option key="0" value="0">全部用户</Option>);
         NetUtils.get(Urls.PRE_FIX + "/list", [], function (data) {
             console.log(data);
-            for (var index = 0; index < data.length; index++) {
-                let userId = data[index].userId;
-                users.push(<Option key={userId} value={userId}>{userId}</Option>);
+            var usersInfo = data.data;
+            for (var index = 0; index < usersInfo.length; index++) {
+                let userId = usersInfo[index].userId;
+                let nickName = usersInfo[index].nickname;
+                let headPic = usersInfo[index].headPic;
+                users.push(<Option key={userId} value={userId}>
+                    <img style={{width:20, height:20}} src={headPic} />
+                    {nickName} </Option>);
             }
         }, data => {
             alert("错误" + data)

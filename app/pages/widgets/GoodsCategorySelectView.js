@@ -40,6 +40,7 @@ class GoodsCategorySelectView extends React.Component {
         var url = Urls.GOODS_CATEGORIES_URL;
         var self = this;
         NetUtils.get(url, null, (responseJson) => {
+
             self.updateCategoryOptions(responseJson);
         }, (error) => {
             message.info("获取商品分类失败: " + error);
@@ -47,13 +48,13 @@ class GoodsCategorySelectView extends React.Component {
     }
 
     updateCategoryOptions(json) {
+        let categories = json.data;
         var options = [];
-
-        for (var index = 0; index < json.length; index++) {
+        for (var index = 0; index < categories.length; index++) {
 
             var option = {
-                title: json[index].name,
-                value: json[index].id + ""
+                title: categories[index].name,
+                value: categories[index].id + ""
             };
 
             options[index] = option;

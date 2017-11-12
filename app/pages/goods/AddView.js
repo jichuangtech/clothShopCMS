@@ -327,7 +327,7 @@ class AddView extends React.Component {
         goodsVO.colorIds = colorIds;
         goodsVO.image = this.state.image[0];
         console.log(goodsVO);
-        NetUtils.postJsonWithFile(Urls.ADD_GOODS_URL, goodsVO, function (response) {
+        NetUtils.postJsonWithFile(Urls.GOODS_URL, goodsVO, function (response) {
             message.info("发布商品成功");
             form.resetFields();
             // self.props.history.push("/main/goods/query");

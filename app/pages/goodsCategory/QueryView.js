@@ -16,7 +16,7 @@ const columns = [{
     title: '图片',
     key: 'image',
     render: function (text, record) {
-        var image = "http://www.jichuangtech.site/clothshopserver/api/goodsCategories/picture/" + record.image;
+        var image = "https://www.jichuangtech.site/clothshopserver/api/goodsCategories/picture/" + record.image;
         return (<img style={{width: 34, height: 34}}
                      src={image}/>);
     }
@@ -87,35 +87,24 @@ class QueryView extends React.Component {
     queryCategory() {
         var self = this;
 
-        NetUtils.get(Urls.GOODS_CATEGORY, null, (data) => {
+        NetUtils.get(Urls.GOODS_CATEGORIES_URL, null, (data) => {
             self.updateCategory(data);
         }, (error) => {
             console.log(error);
         })
-        // fetch(url, {
-        //     method: 'GET',
-        //     headers: {
-        //         'Accept': 'application/json',
-        //         'Content-Type': 'application/json',
-        //     }
-        // }).then((response) => response.json())
-        //     .then(function (responseJson) {
-        //         self.updateCategory(responseJson)
-        //     }, function (error) {
-        //         // alert("请求失败 error: " + error);
-        //     });
     }
 
     updateCategory(json) {
+        let goodsCategories = json.data;
         var data = [];
 
-        for (var index = 0; index < json.length; index++) {
+        for (var index = 0; index < goodsCategories.length; index++) {
 
             var row = {
                 key: '' + index,
-                category: json[index].name,
-                image: json[index].image,
-                id: json[index].id
+                category: goodsCategories[index].name,
+                image: goodsCategories[index].image,
+                id: goodsCategories[index].id
             };
 
             data.push(row);

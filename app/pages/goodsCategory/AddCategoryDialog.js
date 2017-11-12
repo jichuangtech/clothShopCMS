@@ -75,7 +75,7 @@ class AddCategoryDialog extends React.Component {
             image: this.state.image[0]
         }
         var self = this;
-        NetUtils.postJsonWithFile(Urls.GOODS_CATEGORY, cate, function (response) {
+        NetUtils.postJsonWithFile(Urls.GOODS_CATEGORIES_URL, cate, function (response) {
             message.info("发布商品分类成功");
             self.setState({
                 visible: false
