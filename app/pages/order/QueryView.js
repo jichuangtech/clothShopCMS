@@ -228,9 +228,10 @@ class QueryView extends React.Component {
                 let userId = usersInfo[index].userId;
                 let nickName = usersInfo[index].nickname;
                 let headPic = usersInfo[index].headPic;
+                let loginCount = usersInfo[index].loginCount + "";
                 users.push(<Option key={userId} value={userId}>
                     <img style={{width:20, height:20}} src={headPic} />
-                    {nickName} </Option>);
+                    {nickName} :  {loginCount}</Option>);
             }
         }, data => {
             alert("错误" + data)

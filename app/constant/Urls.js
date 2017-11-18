@@ -1,6 +1,6 @@
-// const PRE_FIX = "https://www.jichuangtech.site/clothshopserver";
+const PRE_FIX = "https://www.jichuangtech.site/clothshopserver";
 // const PRE_FIX = "http://localhost:8087";
-const PRE_FIX = "http://localhost:8070";
+// const PRE_FIX = "http://localhost:8070";
 
 const COLOR_URL = PRE_FIX + "/api/goodsInfo/color";
 const GOODS_URL = PRE_FIX + "/api/goods";
