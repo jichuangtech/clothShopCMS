@@ -1,6 +1,7 @@
 const PRE_FIX = "https://www.jichuangtech.site/clothshopserver";
-// const PRE_FIX = "http://localhost:8087";
 // const PRE_FIX = "http://localhost:8070";
+const ROUTER_PREFIX = "";
+// const ROUTER_PREFIX = "/clothShopCMS";
 
 const COLOR_URL = PRE_FIX + "/api/goodsInfo/color";
 const GOODS_URL = PRE_FIX + "/api/goods";
@@ -19,5 +20,6 @@ export {
     REGISTER_ERROR,
     GOODS_URL,
     GOODS_CATEGORIES_URL,
-    LOGIN_URL
+    LOGIN_URL,
+    ROUTER_PREFIX
 }

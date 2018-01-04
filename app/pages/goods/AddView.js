@@ -1,7 +1,7 @@
 var React = require("react");
 import {Modal, Button, message, Input, Row, Col, Radio, Checkbox, Upload, Icon, Form} from 'antd';
 import StringUtils from '../../utils/StringUtils';
-import GoodsCategorySelectView from '../widgets/GoodsCategorySelectView';
+import GoodsCategorySelectView from '../widget/GoodsCategorySelectView';
 import NetUtils from '../../utils/NetUtils';
 import * as Urls from "../../constant/Urls";
 import {connect} from 'react-redux';
@@ -53,12 +53,11 @@ class AddView extends React.Component {
         const props = {
             beforeUpload: (file) => {
                 var isImage = false;
-                // || file.type === 'image/png'
-                if (file.type === 'image/jpeg') {
+                if (file.type === 'image/jpeg' || file.type === 'image/png') {
                     isImage = true;
                 }
                 if (!isImage) {
-                    message.error('请上传JPG的图片!');
+                    message.error('请上传JPG/PNG的图片!');
                     return false;
                 }
                 this.setState(({image}) => ({

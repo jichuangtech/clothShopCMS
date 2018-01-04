@@ -1,6 +1,6 @@
 var React = require("react");
 import {Button, message, Table} from 'antd';
-import SelectView from '../widgets/SelectView';
+import SelectView from './/SelectView';
 import * as Urls from '../../constant/Urls';
 import NetUtils from '../../utils/NetUtils';
 const defaultOption = {

@@ -7,6 +7,10 @@
         "style": "css"
       }
     ]
+  ],
+  "presets": [
+    "react",
+    "es2015"
   ]
 }
 

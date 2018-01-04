@@ -1,7 +1,7 @@
 var React = require("react");
 import {Modal, Button, message, Input, Row, Col, Radio} from 'antd';
 import StringUtils from '../../utils/StringUtils';
-import GoodsCategorySelectView from '../widgets/GoodsCategorySelectView';
+import GoodsCategorySelectView from '../widget/GoodsCategorySelectView';
 
 const RadioGroup = Radio.Group;
 

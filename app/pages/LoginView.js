@@ -35,7 +35,7 @@ class NormalLoginForm extends React.Component {
         this.props.form.validateFields((err, values) => {
             if (!err) {
                 console.log('Received values of form: ', values);
-                var self = this;
+                let self = this;
                 this.props.dispatch({type: LoginType.LOGGED_ING})
                 // this.props.history.push("/main");
 
@@ -70,7 +70,6 @@ class NormalLoginForm extends React.Component {
 
     render() {
         const {getFieldDecorator} = this.props.form;
-        var status = this.props.loginProps.status;
         return (
             <Form onSubmit={this.handleSubmit.bind(this)} className="login-form">
                 <FormItem>
@@ -100,10 +99,14 @@ class NormalLoginForm extends React.Component {
                     <Button type="primary" htmlType="submit" className="login-form-button">
                         登录
                     </Button>
-                    Or <a href="">Register now! {this.props.loginProps.status}</a>
+                    Or <a href="#" onClick={() => {this.onRegisterClick()}}>Register now! {this.props.loginProps.status}</a>
                 </FormItem>
             </Form>
         );
+    }
+
+    onRegisterClick() {
+        this.props.history.push("/register");
     }
 }
 

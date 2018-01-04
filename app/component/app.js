@@ -12,7 +12,6 @@ import MainView from '../pages/main';
 import '../style/main.css';
 import GoodsCategoryView from '../pages/goodsCategory/GoodsCategoryView';
 
-
 import {
     Router,
     Route,
@@ -24,16 +23,17 @@ import {
 } from 'react-router-dom';
 
 import {Navbar} from "react-bootstrap";
+import * as Urls from "../constant/Urls";
 
-
-var Register = React.createClass({
+const ROUTER_PREFIX = Urls.ROUTER_PREFIX;
+const Register = React.createClass({
 
     render: function () {
         return (<div>我是注册</div>);
     }
 });
 
-var AppRouter = React.createClass({
+const AppRouter = React.createClass({
     render: function () {
         const menu = (
             <Menu>
@@ -42,12 +42,12 @@ var AppRouter = React.createClass({
             </Menu>
         );
         return (
-            <BrowserRouter>
-                <div style={ {display: 'flex', flexDirection: "column", flex: 1}}>
+            <BrowserRouter basename={ROUTER_PREFIX}>
+                <div style={{display: 'flex', flexDirection: "column", flex: 1}}>
                     <Navbar style={{backgroundColor: "#222222", height: "45px"}}>
                         <Navbar.Header>
                             <Navbar.Brand>
-                                <Col span={4}><a href="/" style={{
+                                <Col span={4}><a href={ROUTER_PREFIX + "/"} style={{
                                     color: "#fff",
                                     margin: "10px",
                                     lineHeight: "44px",
@@ -87,7 +87,7 @@ var AppRouter = React.createClass({
 
 });
 
-var App = React.createClass({
+const App = React.createClass({
     render: function () {
         return (
             <Provider store={store}>

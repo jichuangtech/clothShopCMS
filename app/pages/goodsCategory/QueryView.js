@@ -16,7 +16,7 @@ const columns = [{
     title: '图片',
     key: 'image',
     render: function (text, record) {
-        var image = "https://www.jichuangtech.site/clothshopserver/api/goodsCategories/picture/" + record.image;
+        var image = "https://www.jichuangtech.site/clothshopserver/api/info/picture/" + record.image;
         return (<img style={{width: 34, height: 34}}
                      src={image}/>);
     }
@@ -55,7 +55,7 @@ class QueryView extends React.Component {
         var params = [];
         params["categoryId"] = categoryId;
         NetUtils.delete(url, params, function (json) {
-            if (json.statusCode == 200) {
+            if (json.statusCode === 200) {
                 self.queryCategory();
                 message.info("删除成功！");
             } else {

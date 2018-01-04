@@ -63,8 +63,9 @@ class NetUtils extends React.Component {
         };
 
         fetch(url, fetchOption)
-            .then((data) => {
-                successCallback(data);
+            .then((response) => response.json())
+            .then((responseJson) => {
+                successCallback(responseJson);
             }, function (failMsg) {
                 failCallback(failMsg)
             }).catch(function (error) {

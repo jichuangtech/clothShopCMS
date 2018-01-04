@@ -17,7 +17,9 @@ import {
     BrowserRouter,
     Link
 } from 'react-router-dom';
+import * as Urls from "../constant/Urls";
 
+const ROUTER_PREFIX = Urls.ROUTER_PREFIX;
 const menu_style = {
     background: "#333333", color: "#fff"
 };
@@ -124,7 +126,6 @@ class MainPage extends React.Component {
                             <Route path={`${this.props.match.url}/order/:action`} component={OrderView}/>
                         </Content>
                         <Footer style={{textAlign: 'center'}}>
-                            Ant Design ©2016 Created by Ant UED
                         </Footer>
                     </Layout>
 

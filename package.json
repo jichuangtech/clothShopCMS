@@ -40,7 +40,6 @@
     "redux": "^3.6.0",
     "redux-logger": "^2.7.4",
     "redux-thunk": "^2.2.0",
-    "react-navigation": "^1.0.0-beta.11",
     "style-loader": "^0.13.2"
   }
 }

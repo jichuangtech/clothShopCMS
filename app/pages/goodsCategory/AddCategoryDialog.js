@@ -18,16 +18,16 @@ class AddCategoryDialog extends React.Component {
             beforeUpload: (file) => {
                 var isImage = false;
                 // || file.type === 'image/png'
-                if (file.type === 'image/jpeg') {
+                if (file.type === 'image/jpeg' || file.type === 'image/png') {
                     isImage = true;
                 }
                 if (!isImage) {
-                    message.error('请上传JPG的图片!');
+                    message.error('请上传JPG/PNG的图片!');
                     return false;
                 }
-                this.setState(({image}) => ({
-                    image: [file],
-                }));
+                this.setState({
+                    image: [file]
+                });
                 return false;
             },
             fileList: this.state.image,
@@ -76,14 +76,17 @@ class AddCategoryDialog extends React.Component {
         }
         var self = this;
         NetUtils.postJsonWithFile(Urls.GOODS_CATEGORIES_URL, cate, function (response) {
-            message.info("发布商品分类成功");
-            self.setState({
-                visible: false
-            });
-            // self.props.history.push("/main/goods/query");
+            if(response.statusCode === 200) {
+                message.info("发布商品分类成功");
+            } else {
+                message.info("发布商品分类失败：" + response.msg);
+            }
+            self.hideDialog();
         }, function (error) {
+            message.info("发布商品分类失败： " + JSON.stringify(error));
             console.log("发布商品分类1", error);
         }, (error) => {
+            message.info("发布商品分类失败： " + JSON.stringify(error));
             console.log("发布商品分类2", error);
         })
 
@@ -92,9 +95,9 @@ class AddCategoryDialog extends React.Component {
     hideDialog() {
         this.setState({
             visible: false,
+        }, function () {
+            this.props.onDismiss();
         });
-
-        this.props.onDismiss();
     }
 
     showDialog() {

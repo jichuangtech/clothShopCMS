@@ -3,8 +3,8 @@
  */
 var React = require("react");
 import {Button, message, Table, Spin} from 'antd';
-import SelectView from '../widgets/SelectView';
-import GoodsCategorySelectView from '../widgets/GoodsCategorySelectView';
+import SelectView from '../widget/SelectView';
+import GoodsCategorySelectView from '../widget/GoodsCategorySelectView';
 import AddGoodsDialog from './AddGoodsDialog';
 import NetUtils from '../../utils/NetUtils';
 import * as Urls from '../../constant/Urls';
@@ -14,7 +14,7 @@ const columns = [{
     dataIndex: 'image',
     key: 'image',
     render: function (text, record) {
-        var image = "https://www.jichuangtech.site/clothshopserver/api/goodsCategories/picture/" + record.image;
+        var image = "https://www.jichuangtech.site/clothshopserver/api/info/picture/" + record.image;
         return (<img style={{width: 34, height: 34}}
                      src={image}/>);
     }
@@ -71,8 +71,22 @@ class QueryView extends React.Component {
         queryViewRef = this;
     }
 
-    deleteGoods() {
-        message.info("删除商品");
+    deleteGoods(goodsIds) {
+        var self = this;
+        var url = Urls.GOODS_URL;
+
+        var params = [];
+        params["goodsIds"] = goodsIds;
+        NetUtils.delete(url, params, function (json) {
+            if (json.statusCode === 200) {
+                self.queryGoods();
+                message.info("删除成功！");
+            } else {
+                message.info(json.msg);
+            }
+        }, function (e) {
+            alert(" 删除失败 e: " + e);
+        });
     }
 
     editGoods() {
@@ -142,20 +156,6 @@ class QueryView extends React.Component {
             });
         });
 
-        // fetch(url, {
-        //     method: 'GET',
-        //     headers: {
-        //         'Accept': 'application/json',
-        //         'Content-Type': 'application/json',
-        //     }
-        // }).then((response) => response.json())
-        //     .then(function (responseJson) {
-        //         console.log(" goods query 获取商品成功 ");
-        //         self.updateGoods(responseJson)
-        //     }, function (error) {
-        //         message.info("获取商品失败: " + error);
-        //     });
-
     }
 
     queryGoods() {
@@ -190,7 +190,7 @@ class QueryView extends React.Component {
                 image: goodsObj[index].originalImg,
                 title: goodsObj[index].goodsRemark,
                 storeCount: goodsObj[index].storeCount,
-                id: goodsObj[index].id
+                id: goodsObj[index].goodsId
             };
 
             goods.push(row);
