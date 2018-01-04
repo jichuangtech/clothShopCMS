@@ -8,7 +8,6 @@ import {Form, Icon, Input, Button, Checkbox, message} from 'antd';
 import * as LoginType from '../constant/loginType';
 import NetUtils from '../utils/NetUtils';
 import * as Urls from '../constant/Urls';
-
 const FormItem = Form.Item;
 import {
     Router,
